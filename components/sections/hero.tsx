@@ -2,33 +2,23 @@
 
 import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
+import { siteConfig } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
-import { ArrowDown } from "lucide-react"
-import { MagneticButton } from "./magnetic-button"
 import { CharacterReveal } from "./text-reveal"
+import { MagneticButton } from "./magnetic-button"
+import { ArrowDown, Github, Linkedin, Twitter, Mail } from "lucide-react"
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.3,
-    },
+    transition: { staggerChildren: 0.1, delayChildren: 0.3 },
   },
 }
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30, filter: "blur(10px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
 }
 
 export function Hero() {
@@ -78,7 +68,7 @@ export function Hero() {
             variants={itemVariants}
             className="text-4xl font-bold text-foreground sm:text-6xl lg:text-7xl"
           >
-            <CharacterReveal delay={0.5}>Your Name.</CharacterReveal>
+            <CharacterReveal delay={0.5}>{siteConfig.name}</CharacterReveal>
           </motion.h1>
 
           {/* Tagline with gradient text */}
@@ -86,8 +76,8 @@ export function Hero() {
             variants={itemVariants}
             className="text-3xl font-bold sm:text-5xl lg:text-6xl"
           >
-            <span className="text-balance bg-gradient-to-r from-muted-foreground via-muted-foreground/80 to-muted-foreground bg-clip-text text-transparent">
-              I build things for the web.
+            <span className="text-balance bg-linear-to-r from-muted-foreground via-muted-foreground/80 to-muted-foreground bg-clip-text text-transparent">
+              {siteConfig.tagline}
             </span>
           </motion.h2>
 
@@ -96,9 +86,7 @@ export function Hero() {
             variants={itemVariants}
             className="max-w-xl text-lg leading-relaxed text-muted-foreground"
           >
-            I&apos;m a web developer specializing in building exceptional digital experiences. 
-            Currently, I&apos;m focused on building accessible, human-centered products that 
-            make a real difference.
+            {siteConfig.description}
           </motion.p>
 
           {/* Buttons */}
@@ -131,7 +119,7 @@ export function Hero() {
                 variant="ghost"
                 className="text-primary hover:bg-primary/10 px-8 py-6 text-base"
               >
-                <a href="#contact">Get in touch</a>
+                <a href={`mailto:${siteConfig.links.email}`}>Get in touch</a>
               </Button>
             </MagneticButton>
           </motion.div>

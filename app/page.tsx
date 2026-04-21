@@ -1,12 +1,12 @@
-import { Header } from "@/components/portfolio/header"
-import { Hero } from "@/components/portfolio/hero"
-import { About } from "@/components/portfolio/about"
-import { Experience } from "@/components/portfolio/experience"
-import { Projects } from "@/components/portfolio/projects"
-import { Contact } from "@/components/portfolio/contact"
-import { Footer } from "@/components/portfolio/footer"
-import { SocialSidebar } from "@/components/portfolio/social-sidebar"
-import { ScrollProgress } from "@/components/portfolio/scroll-progress"
+import { Header } from "@/components/sections/header"
+import { Hero } from "@/components/sections/hero"
+import { About } from "@/components/sections/about"
+import { Experience } from "@/components/sections/experience"
+import { Projects } from "@/components/sections/projects"
+import { Contact } from "@/components/sections/contact"
+import { Footer } from "@/components/sections/footer"
+import { SocialSidebar } from "@/components/sections/social-sidebar"
+import { ScrollProgress } from "@/components/sections/scroll-progress"
 
 export default function Home() {
   return (

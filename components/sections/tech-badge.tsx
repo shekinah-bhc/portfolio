@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { techIcons } from "@/lib/projects"
+import { techIcons } from "@/lib/data/projects"
 
 interface TechBadgeProps {
   tech: string

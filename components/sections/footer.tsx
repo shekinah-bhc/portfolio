@@ -2,14 +2,14 @@
 
 import { useRef } from "react"
 import { motion, useInView } from "framer-motion"
-import { Github, Linkedin, Twitter, Instagram, Mail } from "lucide-react"
+import { siteConfig } from "@/lib/constants"
+import { Github, Linkedin, Twitter, Mail } from "lucide-react"
 
 const socialLinks = [
-  { name: "GitHub", icon: Github, href: "https://github.com" },
-  { name: "LinkedIn", icon: Linkedin, href: "https://linkedin.com" },
-  { name: "Twitter", icon: Twitter, href: "https://twitter.com" },
-  { name: "Instagram", icon: Instagram, href: "https://instagram.com" },
-  { name: "Email", icon: Mail, href: "mailto:hello@example.com" },
+  { name: "GitHub", icon: Github, href: siteConfig.links.github },
+  { name: "LinkedIn", icon: Linkedin, href: siteConfig.links.linkedin },
+  { name: "Twitter", icon: Twitter, href: siteConfig.links.twitter },
+  { name: "Email", icon: Mail, href: `mailto:${siteConfig.links.email}` },
 ]
 
 export function Footer() {
@@ -58,7 +58,7 @@ export function Footer() {
           transition={{ delay: 0.4 }}
         >
           <motion.a
-            href="https://github.com/yourusername"
+            href={siteConfig.links.github}
             target="_blank"
             rel="noopener noreferrer"
             className="font-mono text-sm text-muted-foreground transition-colors hover:text-primary"
@@ -68,7 +68,7 @@ export function Footer() {
               initial={{ opacity: 0.8 }}
               whileHover={{ opacity: 1 }}
             >
-              Designed &amp; Built by Your Name
+              Designed & Built by {siteConfig.name}
             </motion.span>
           </motion.a>
         </motion.div>

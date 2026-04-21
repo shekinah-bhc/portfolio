@@ -1,12 +1,13 @@
 "use client"
 
 import { useRef } from "react"
-import { motion, useInView, useScroll, useTransform } from "framer-motion"
+import { motion, useInView, useScroll, useTransform, Variants } from "framer-motion"
+import { siteConfig } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
-import { MagneticButton } from "./magnetic-button"
 import { CharacterReveal } from "./text-reveal"
+import { MagneticButton } from "./magnetic-button"
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -17,7 +18,7 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
   visible: {
     opacity: 1,
@@ -91,7 +92,7 @@ export function Contact() {
               className="relative bg-transparent border-2 border-primary text-primary hover:bg-primary/10 px-10 py-6 text-base overflow-hidden group"
             >
               <motion.a 
-                href="mailto:hello@example.com"
+                href={`mailto:${siteConfig.links.email}`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >

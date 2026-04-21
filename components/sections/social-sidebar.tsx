@@ -1,17 +1,16 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { Github, Linkedin, Twitter, Instagram, Codepen } from "lucide-react"
+import { motion, Variants } from "framer-motion"
+import { Github, Linkedin, Twitter } from "lucide-react"
+import { siteConfig } from "@/lib/constants"
 
 const socialLinks = [
-  { name: "GitHub", icon: Github, href: "https://github.com" },
-  { name: "LinkedIn", icon: Linkedin, href: "https://linkedin.com" },
-  { name: "Twitter", icon: Twitter, href: "https://twitter.com" },
-  { name: "Instagram", icon: Instagram, href: "https://instagram.com" },
-  { name: "CodePen", icon: Codepen, href: "https://codepen.io" },
+  { name: "GitHub", icon: Github, href: siteConfig.links.github },
+  { name: "LinkedIn", icon: Linkedin, href: siteConfig.links.linkedin },
+  { name: "Twitter", icon: Twitter, href: siteConfig.links.twitter },
 ]
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -22,7 +21,7 @@ const containerVariants = {
   },
 }
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, x: -20 },
   visible: {
     opacity: 1,
@@ -34,7 +33,7 @@ const itemVariants = {
   },
 }
 
-const lineVariants = {
+const lineVariants: Variants = {
   hidden: { scaleY: 0, originY: 1 },
   visible: {
     scaleY: 1,
@@ -86,7 +85,7 @@ export function SocialSidebar() {
         transition={{ delay: 1.2 }}
       >
         <motion.a
-          href="mailto:hello@example.com"
+          href={`mailto:${siteConfig.links.email}`}
           className="font-mono text-sm text-muted-foreground transition-colors hover:text-primary"
           style={{ writingMode: "vertical-rl" }}
           initial={{ opacity: 0, y: 20 }}
@@ -94,7 +93,7 @@ export function SocialSidebar() {
           transition={{ delay: 1.3, duration: 0.5 }}
           whileHover={{ y: -4, color: "var(--primary)" }}
         >
-          hello@example.com
+          {siteConfig.links.email}
         </motion.a>
         <motion.div 
           className="h-24 w-px bg-muted-foreground"
