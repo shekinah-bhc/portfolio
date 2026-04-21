@@ -10,10 +10,20 @@ export const size = {
 export const contentType = 'image/png'
 
 export default async function Image() {
-  // Fetch a trendy font (Plus Jakarta Sans)
-  const fontData = await fetch(
-    new URL('https://fonts.gstatic.com/s/plusjakartasans/v8/L0x9DFMnlVwD4h3br8Q-y32WvV7-930Nv-S17N_dER_m.woff', import.meta.url)
-  ).then((res) => res.arrayBuffer())
+  // Fetch Plus Jakarta Sans font with a fallback in case the CDN is unreachable during build
+  let fontData: ArrayBuffer | null = null
+  try {
+    const res = await fetch(
+      'https://fonts.gstatic.com/s/plusjakartasans/v8/L0x9DFMnlVwD4h3br8Q-y32WvV7-930Nv-S17N_dER_m.woff'
+    )
+    const contentType = res.headers.get('content-type') || ''
+    // Only use the response if it is actually a font binary (not an HTML error page)
+    if (res.ok && !contentType.includes('text/html')) {
+      fontData = await res.arrayBuffer()
+    }
+  } catch {
+    // silently fall back to system font
+  }
 
   return new ImageResponse(
     (
@@ -90,14 +100,18 @@ export default async function Image() {
     ),
     {
       ...size,
-      fonts: [
-        {
-          name: 'Plus Jakarta Sans',
-          data: fontData,
-          style: 'normal',
-          weight: 800,
-        },
-      ],
+      ...(fontData
+        ? {
+            fonts: [
+              {
+                name: 'Plus Jakarta Sans',
+                data: fontData,
+                style: 'normal' as const,
+                weight: 800,
+              },
+            ],
+          }
+        : {}),
     }
   )
 }

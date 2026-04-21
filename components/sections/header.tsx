@@ -26,10 +26,10 @@ const navItemVariants = {
     transition: {
       delay: 0.1 + i * 0.1,
       duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   }),
-}
+} 
 
 const mobileMenuVariants = {
   hidden: { opacity: 0, x: "100%" },
@@ -37,7 +37,7 @@ const mobileMenuVariants = {
     opacity: 1, 
     x: 0,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       stiffness: 300,
       damping: 30,
     }
@@ -47,7 +47,7 @@ const mobileMenuVariants = {
     x: "100%",
     transition: {
       duration: 0.3,
-      ease: "easeInOut",
+      ease: "easeInOut" as const,
     }
   },
 }
@@ -60,7 +60,7 @@ const mobileNavItemVariants = {
     transition: {
       delay: 0.1 + i * 0.1,
       duration: 0.4,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   }),
 }

@@ -3,7 +3,7 @@ import { Resend } from 'resend'
 import { z } from 'zod'
 import { siteConfig } from '@/lib/constants'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = new Resend(process.env.RESEND_API_KEY || "re-88998899889988998899889988998899") 
 
 // Simple in-memory rate limiting
 const rateLimitMap = new Map<string, { count: number; lastRequest: number }>()
