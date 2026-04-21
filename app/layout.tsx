@@ -4,7 +4,7 @@ import { Analytics } from '@vercel/analytics/next'
 import { siteConfig } from '@/lib/constants'
 import { Providers } from '@/components/providers'
 import './globals.css'
-
+import { SpeedInsights } from "@vercel/speed-insights/next"
 const sans = Plus_Jakarta_Sans({ 
   subsets: ["latin"],
   variable: "--font-sans",
@@ -84,6 +84,7 @@ export default function RootLayout({
           {children}
         </Providers>
         {process.env.NODE_ENV === 'production' && <Analytics />}
+        <SpeedInsights />
       </body>
     </html>
   )
