@@ -33,7 +33,7 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 }
@@ -45,7 +45,7 @@ const skillVariants = {
     x: 0,
     transition: {
       duration: 0.4,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
       delay: i * 0.05,
     },
   }),
@@ -158,7 +158,7 @@ export function About() {
             className="relative mx-auto w-64 lg:w-full"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={imageInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
           >
             <div className="group relative">
               {/* Image container with clip-path reveal */}
@@ -166,9 +166,9 @@ export function About() {
                 className="relative z-10 overflow-hidden rounded-lg"
                 initial={{ clipPath: "inset(0 100% 0 0)" }}
                 animate={imageInView ? { clipPath: "inset(0 0% 0 0)" } : { clipPath: "inset(0 100% 0 0)" }}
-                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
               >
-                <div className="aspect-square bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                <div className="aspect-square bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                   <div className="text-6xl font-bold text-primary/30">YN</div>
                 </div>
                 <motion.div 
