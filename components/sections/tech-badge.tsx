@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { techIcons } from "@/lib/data/projects"
+
+const techIcons: Record<string, string> = {}
 
 interface TechBadgeProps {
   tech: string

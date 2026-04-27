@@ -1,237 +1,134 @@
 "use client"
 
-import { useState, useRef } from "react"
-import { motion, useInView, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils"
+import { motion, Variants } from "framer-motion"
+import { useInView } from "react-intersection-observer"
 import { TextReveal } from "./text-reveal"
 
 const experiences = [
   {
-    company: "Acme Corp",
-    title: "Senior Frontend Engineer",
-    period: "2022 — Present",
-    url: "#",
+    title: "Freelance Full Stack Developer",
+    company: "Self-Employed",
+    period: "2024 — Present",
     description: [
-      "Build and maintain critical components used to construct frontend interfaces, with a focus on accessibility and performance",
-      "Work closely with cross-functional teams, including designers, product managers, and other developers to implement new features",
-      "Lead the migration of legacy codebase to modern React patterns, improving developer experience and reducing bundle size by 40%",
+      "Built production web applications for institutional and private clients using Next.js 15, TypeScript, and high-end animations.",
+      "Developed high-performance agency websites and complex full-stack portals from scratch.",
+      "Implemented GSAP-powered scroll sequences and Three.js visual elements for luxury aesthetics.",
     ],
-    skills: ["React", "TypeScript", "Next.js", "Tailwind CSS"],
+    skills: ["Next.js 15", "TypeScript", "GSAP", "Three.js", "Resend", "AWS S3"],
   },
   {
-    company: "Tech Startup",
-    title: "Frontend Developer",
-    period: "2020 — 2022",
-    url: "#",
+    title: "MCA (Master of Computer Applications)",
+    company: "Bishop Heber College",
+    period: "2022 — 2024",
     description: [
-      "Developed and shipped highly interactive web applications using React and Next.js",
-      "Collaborated with UI/UX designers to implement responsive designs and smooth animations",
-      "Optimized application performance resulting in a 50% improvement in load times",
+      "Specialized in advanced web technologies and software engineering principles.",
+      "Graduated with honors, focusing on building scalable full-stack applications.",
+      "Participated in various technical symposiums and development workshops.",
     ],
-    skills: ["JavaScript", "React", "Node.js", "PostgreSQL"],
-  },
-  {
-    company: "Digital Agency",
-    title: "Web Developer",
-    period: "2018 — 2020",
-    url: "#",
-    description: [
-      "Built and maintained websites for various clients using modern web technologies",
-      "Worked with a team of designers and developers in an agile environment",
-      "Implemented custom WordPress themes and plugins for content management",
-    ],
-    skills: ["HTML", "CSS", "JavaScript", "WordPress"],
-  },
-  {
-    company: "Freelance",
-    title: "Web Developer",
-    period: "2016 — 2018",
-    url: "#",
-    description: [
-      "Designed and developed websites for small businesses and individuals",
-      "Managed client relationships and project timelines",
-      "Created responsive, mobile-first websites using modern CSS techniques",
-    ],
-    skills: ["HTML", "CSS", "JavaScript", "PHP"],
+    skills: ["Full Stack Development", "Database Management", "Software Architecture"],
   },
 ]
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
     },
   },
 }
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1] as const,
-    },
-  },
-}
-
-const contentVariants = {
-  hidden: { opacity: 0, x: 20, filter: "blur(4px)" },
+const itemVariants: Variants = {
+  hidden: { opacity: 0, x: -30 },
   visible: {
     opacity: 1,
     x: 0,
-    filter: "blur(0px)",
     transition: {
-      duration: 0.4,
+      duration: 0.8,
       ease: [0.22, 1, 0.36, 1] as const,
-    },
-  },
-  exit: {
-    opacity: 0,
-    x: -20,
-    filter: "blur(4px)",
-    transition: {
-      duration: 0.3,
     },
   },
 }
 
 export function Experience() {
-  const [activeTab, setActiveTab] = useState(0)
-  const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
 
   return (
-    <section id="experience" className="px-6 py-24">
+    <section id="experience" className="px-6 py-24 relative overflow-hidden">
       <motion.div
-        ref={sectionRef}
+        ref={ref}
         variants={containerVariants}
         initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="mx-auto max-w-4xl"
+        animate={inView ? "visible" : "hidden"}
+        className="mx-auto max-w-5xl"
       >
-        {/* Section heading */}
-        <motion.h2 
-          variants={itemVariants}
-          className="mb-12 flex items-center gap-4 text-2xl font-bold text-foreground sm:text-3xl"
-        >
-          <span className="font-mono text-xl text-primary">02.</span>
-          <TextReveal>Where I&apos;ve Worked</TextReveal>
-          <motion.span 
-            className="h-px flex-1 bg-border origin-left"
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] as const }}
+        <div className="mb-16 flex flex-col items-center text-center space-y-4">
+          <motion.h2 
+            variants={itemVariants}
+            className="text-3xl font-bold text-foreground sm:text-4xl"
+          >
+            <TextReveal>My Professional Journey</TextReveal>
+          </motion.h2>
+          <motion.div 
+            variants={itemVariants}
+            className="h-1 w-20 bg-primary rounded-full"
           />
-        </motion.h2>
+        </div>
 
-        <motion.div 
-          variants={itemVariants}
-          className="flex flex-col gap-8 md:flex-row"
-        >
-          {/* Tab List */}
-          <div className="relative flex overflow-x-auto md:flex-col md:overflow-visible">
-            {experiences.map((exp, index) => (
-              <motion.button
-                key={exp.company}
-                onClick={() => setActiveTab(index)}
-                className={cn(
-                  "relative whitespace-nowrap px-5 py-3 text-left font-mono text-sm transition-all",
-                  activeTab === index
-                    ? "bg-secondary text-primary"
-                    : "text-muted-foreground hover:bg-secondary/50 hover:text-primary"
-                )}
-                whileHover={{ x: activeTab === index ? 0 : 4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                {exp.company}
-                {activeTab === index && (
-                  <motion.span 
-                    layoutId="activeTab"
-                    className="absolute bottom-0 left-0 h-0.5 w-full bg-primary md:bottom-auto md:left-0 md:top-0 md:h-full md:w-0.5"
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </motion.button>
-            ))}
-          </div>
+        <div className="relative space-y-12 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-linear-to-b before:from-transparent before:via-border before:to-transparent">
+          {experiences.map((exp, index) => (
+            <motion.div 
+              key={index}
+              variants={itemVariants}
+              className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group"
+            >
+              {/* Dot */}
+              <div className="flex items-center justify-center w-10 h-10 rounded-full border border-border bg-background shadow-md md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors group-hover:border-primary group-hover:bg-primary/5">
+                <div className="w-3 h-3 rounded-full bg-border group-hover:bg-primary transition-colors" />
+              </div>
 
-          {/* Tab Content */}
-          <div className="min-h-[320px] flex-1 relative">
-            <AnimatePresence mode="wait">
-              <motion.div 
-                key={activeTab}
-                variants={contentVariants}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <motion.h3 
-                  className="text-xl font-medium text-foreground"
-                >
-                  {experiences[activeTab].title}{" "}
-                  <motion.a
-                    href={experiences[activeTab].url}
-                    className="text-primary hover:underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ color: "var(--primary)" }}
-                  >
-                    @ {experiences[activeTab].company}
-                  </motion.a>
-                </motion.h3>
-                <p className="mt-1 font-mono text-sm text-muted-foreground">
-                  {experiences[activeTab].period}
-                </p>
-                <ul className="mt-6 space-y-4">
-                  {experiences[activeTab].description.map((item, i) => (
-                    <motion.li 
-                      key={i} 
-                      className="flex gap-3 text-muted-foreground"
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.1, duration: 0.4 }}
-                    >
-                      <motion.span 
-                        className="mt-1.5 text-primary"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: i * 0.1 + 0.1, type: "spring" }}
-                      >
-                        ▹
-                      </motion.span>
+              {/* Card */}
+              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl border border-border bg-secondary/30 backdrop-blur-sm shadow-sm transition-all group-hover:border-primary/20 group-hover:shadow-lg group-hover:shadow-primary/5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-foreground">{exp.title}</h3>
+                    <p className="text-primary font-mono text-sm">{exp.company}</p>
+                  </div>
+                  <time className="text-xs font-mono text-muted-foreground bg-border/40 px-3 py-1 rounded-full whitespace-nowrap">
+                    {exp.period}
+                  </time>
+                </div>
+                
+                <ul className="space-y-3 mb-6">
+                  {exp.description.map((item, i) => (
+                    <li key={i} className="flex gap-2 text-sm text-muted-foreground/90 leading-relaxed">
+                      <span className="text-primary mt-1 shrink-0 text-[10px]">●</span>
                       <span>{item}</span>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
-                <motion.div 
-                  className="mt-6 flex flex-wrap gap-2"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  {experiences[activeTab].skills.map((skill, i) => (
-                    <motion.span
+
+                <div className="flex flex-wrap gap-2">
+                  {exp.skills.map((skill) => (
+                    <span
                       key={skill}
-                      className="rounded-full bg-primary/10 px-3 py-1 font-mono text-xs text-primary"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.3 + i * 0.05 }}
-                      whileHover={{ scale: 1.05, backgroundColor: "rgba(100, 255, 218, 0.2)" }}
+                      className="px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider rounded-md bg-primary/5 text-primary border border-primary/10"
                     >
                       {skill}
-                    </motion.span>
+                    </span>
                   ))}
-                </motion.div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </motion.div>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
       </motion.div>
     </section>
   )
 }
+

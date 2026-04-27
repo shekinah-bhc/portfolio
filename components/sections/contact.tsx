@@ -1,146 +1,253 @@
 "use client"
 
-import { useRef } from "react"
-import { motion, useInView, useScroll, useTransform, Variants } from "framer-motion"
+import { useRef, useState } from "react"
+import { motion } from "framer-motion"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
 import { siteConfig } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
-import { CharacterReveal } from "./text-reveal"
-import { MagneticButton } from "./magnetic-button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { toast } from "sonner"
+import { Github, Linkedin, Mail, Send, Loader2 } from "lucide-react"
 
-const containerVariants: Variants = {
+const contactSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  projectType: z.enum(["Website", "Web App", "Other"], {
+    required_error: "Please select a project type",
+  }),
+  budget: z.enum(["<₹50K", "₹50K–₹1L", "₹1L+", "Let's discuss"], {
+    required_error: "Please select a budget range",
+  }),
+  message: z.string().min(10, "Message must be at least 10 characters"),
+})
+
+type ContactFormValues = z.infer<typeof contactSchema>
+
+const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
+    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
   },
 }
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 40, filter: "blur(10px)" },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.7,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
 }
 
 export function Contact() {
-  const sectionRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
   })
 
-  const backgroundY = useTransform(scrollYProgress, [0, 1], [50, -50])
-  const backgroundScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 1.2])
+  async function onSubmit(data: ContactFormValues) {
+    setIsSubmitting(true)
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      })
+
+      if (response.ok) {
+        toast.success("Message sent successfully!")
+        form.reset()
+      } else {
+        toast.error("Failed to send message. Please try again.")
+      }
+    } catch (error) {
+      toast.error("Something went wrong.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   return (
-    <section id="contact" className="relative px-6 py-24 overflow-hidden">
-      {/* Animated background elements */}
+    <section id="contact" className="px-6 py-24 bg-secondary/5">
       <motion.div
-        style={{ y: backgroundY, scale: backgroundScale }}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10"
-      />
-
-      <motion.div
-        ref={sectionRef}
         variants={containerVariants}
         initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="mx-auto max-w-2xl text-center"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className="mx-auto max-w-5xl"
       >
-        <motion.p 
-          variants={itemVariants}
-          className="font-mono text-primary"
-        >
-          04. What&apos;s Next?
-        </motion.p>
+        <div className="grid gap-16 lg:grid-cols-2">
+          {/* Header & Info */}
+          <div className="space-y-8">
+            <div className="space-y-4">
+              <motion.h2 variants={itemVariants} className="text-4xl font-bold tracking-tight sm:text-5xl">
+                Let's Work Together
+              </motion.h2>
+              <motion.p variants={itemVariants} className="text-lg text-muted-foreground max-w-md">
+                Have a project in mind or just want to say hello? I'm available for freelance and full-time opportunities.
+              </motion.p>
+            </div>
 
-        <motion.h2 
-          variants={itemVariants}
-          className="mt-4 text-4xl font-bold text-foreground sm:text-5xl"
-        >
-          <CharacterReveal delay={0.3}>Get In Touch</CharacterReveal>
-        </motion.h2>
-
-        <motion.p 
-          variants={itemVariants}
-          className="mt-6 text-lg leading-relaxed text-muted-foreground"
-        >
-          I&apos;m currently looking for new opportunities and my inbox is always open. 
-          Whether you have a question, a project idea, or just want to say hi, 
-          I&apos;ll try my best to get back to you!
-        </motion.p>
-
-        <motion.div
-          variants={itemVariants}
-          className="mt-12"
-        >
-          <MagneticButton>
-            <Button
-              asChild
-              size="lg"
-              className="relative bg-transparent border-2 border-primary text-primary hover:bg-primary/10 px-10 py-6 text-base overflow-hidden group"
-            >
-              <motion.a 
-                href={`mailto:${siteConfig.links.email}`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+            <motion.div variants={itemVariants} className="space-y-6 pt-8">
+              <a 
+                href={`mailto:${siteConfig.email}`}
+                className="flex items-center gap-4 text-foreground hover:text-primary transition-colors group"
               >
-                <motion.span
-                  className="absolute inset-0 bg-primary/10"
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: 0 }}
-                  transition={{ duration: 0.3, ease: "easeInOut" }}
-                />
-                <span className="relative z-10 flex items-center gap-2">
-                  Say Hello
-                  <motion.span
-                    className="inline-block"
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                  >
-                    →
-                  </motion.span>
-                </span>
-              </motion.a>
-            </Button>
-          </MagneticButton>
-        </motion.div>
+                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Mail className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-xs font-mono text-muted-foreground uppercase">Email Me</p>
+                  <p className="font-medium">{siteConfig.email}</p>
+                </div>
+              </a>
 
-        {/* Decorative animated dots */}
-        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          {[...Array(4)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 bg-primary/30 rounded-full"
-              style={{
-                left: `${20 + i * 20}%`,
-                top: `${30 + (i % 2) * 40}%`,
-              }}
-              animate={{
-                scale: [1, 1.5, 1],
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                repeat: Infinity,
-                duration: 3 + i,
-                ease: "easeInOut",
-                delay: i * 0.5,
-              }}
-            />
-          ))}
+              <div className="flex gap-4 pt-4">
+                <a 
+                  href={siteConfig.links.github}
+                  target="_blank"
+                  className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-all shadow-sm"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+                <a 
+                  href={siteConfig.links.linkedin}
+                  target="_blank"
+                  className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-all shadow-sm"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Form */}
+          <motion.div variants={itemVariants} className="bg-background p-8 rounded-3xl border border-border shadow-xl shadow-primary/5">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Your good name" {...field} className="rounded-xl" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="hello@example.com" {...field} className="rounded-xl" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="projectType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Project Type</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="rounded-xl">
+                              <SelectValue placeholder="Select type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Website">Website</SelectItem>
+                            <SelectItem value="Web App">Web App</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="budget"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Budget Range</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="rounded-xl">
+                              <SelectValue placeholder="Select budget" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="<₹50K">&lt;₹50K</SelectItem>
+                            <SelectItem value="₹50K–₹1L">₹50K–₹1L</SelectItem>
+                            <SelectItem value="₹1L+">₹1L+</SelectItem>
+                            <SelectItem value="Let's discuss">Let's discuss</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Message</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="Tell me about your project..." 
+                          className="min-h-[120px] rounded-xl"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="w-full rounded-xl py-6 text-lg font-bold group"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <>
+                      Send Message
+                      <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    </>
+                  )}
+                </Button>
+              </form>
+            </Form>
+          </motion.div>
         </div>
       </motion.div>
     </section>
   )
 }
+

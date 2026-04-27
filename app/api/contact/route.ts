@@ -13,6 +13,8 @@ const RATE_LIMIT_WINDOW = 3600000 // 1 hour in ms
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(50),
   email: z.string().email("Invalid email address"),
+  projectType: z.enum(["Website", "Web App", "Other"]),
+  budget: z.enum(["<₹50K", "₹50K–₹1L", "₹1L+", "Let's discuss"]),
   message: z.string().min(10, "Message must be at least 10 characters").max(500),
 })
 
@@ -43,15 +45,16 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const validatedData = contactSchema.parse(body)
 
-    const { name, email, message } = validatedData
+    const { name, email, projectType, budget, message } = validatedData
 
     const { data, error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
-      to: siteConfig.links.email || 'your@email.com',
-      subject: `New Portfolio Contact: ${name}`,
+      to: siteConfig.email || 'florashek24official@gmail.com',
+      subject: `New Project Inquiry: ${projectType} from ${name}`,
       replyTo: email,
-      text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+      text: `Name: ${name}\nEmail: ${email}\nProject Type: ${projectType}\nBudget: ${budget}\n\nMessage:\n${message}`,
     })
+
 
     if (error) {
       console.error('Resend Error:', error)

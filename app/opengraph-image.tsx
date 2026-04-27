@@ -10,108 +10,85 @@ export const size = {
 export const contentType = 'image/png'
 
 export default async function Image() {
-  // Fetch Plus Jakarta Sans font with a fallback in case the CDN is unreachable during build
-  let fontData: ArrayBuffer | null = null
-  try {
-    const res = await fetch(
-      'https://fonts.gstatic.com/s/plusjakartasans/v8/L0x9DFMnlVwD4h3br8Q-y32WvV7-930Nv-S17N_dER_m.woff'
-    )
-    const contentType = res.headers.get('content-type') || ''
-    // Only use the response if it is actually a font binary (not an HTML error page)
-    if (res.ok && !contentType.includes('text/html')) {
-      fontData = await res.arrayBuffer()
-    }
-  } catch {
-    // silently fall back to system font
-  }
-
   return new ImageResponse(
     (
       <div
         style={{
-          background: '#09090b',
+          background: 'linear-gradient(to bottom right, #0a0a0a, #1a1a1a)',
           width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          fontFamily: 'Plus Jakarta Sans',
-          position: 'relative',
+          fontFamily: 'sans-serif',
+          color: 'white',
+          padding: '80px',
         }}
       >
-        {/* Subtle Grid Pattern */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: 'radial-gradient(circle at 2px 2px, #27272a 1px, transparent 0)',
-            backgroundSize: '24px 24px',
-            opacity: 0.5,
-          }}
-        />
-
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10,
+            gap: '20px',
+            marginBottom: '40px',
           }}
         >
           <div
             style={{
-              fontSize: 80,
-              fontWeight: 800,
-              color: '#ffffff',
-              marginBottom: 20,
-              textAlign: 'center',
+              width: '80px',
+              height: '80px',
+              background: '#0ea5e9',
+              borderRadius: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '48px',
+              fontWeight: 900,
             }}
           >
-            {siteConfig.name}
+            S
           </div>
-          <div
-            style={{
-              fontSize: 32,
-              fontWeight: 400,
-              color: '#a1a1aa',
-              textAlign: 'center',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-            }}
-          >
-            {siteConfig.title}
-          </div>
+          <div style={{ fontSize: '64px', fontWeight: 800 }}>{siteConfig.name}</div>
         </div>
-
-        {/* Accent Bar */}
         <div
           style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 8,
-            background: 'linear-gradient(90deg, #64ffda, #0a192f)',
+            fontSize: '32px',
+            color: '#94a3b8',
+            textAlign: 'center',
+            maxWidth: '800px',
+            lineHeight: 1.4,
           }}
-        />
+        >
+          {siteConfig.description}
+        </div>
+        <div
+          style={{
+            marginTop: '60px',
+            display: 'flex',
+            gap: '15px',
+          }}
+        >
+          {['Next.js 15', 'TypeScript', 'Animation'].map((tag) => (
+            <div
+              key={tag}
+              style={{
+                padding: '8px 20px',
+                background: 'rgba(14, 165, 233, 0.1)',
+                border: '1px solid rgba(14, 165, 233, 0.3)',
+                borderRadius: '9999px',
+                fontSize: '20px',
+                color: '#0ea5e9',
+              }}
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
       </div>
     ),
     {
       ...size,
-      ...(fontData
-        ? {
-            fonts: [
-              {
-                name: 'Plus Jakarta Sans',
-                data: fontData,
-                style: 'normal' as const,
-                weight: 800,
-              },
-            ],
-          }
-        : {}),
     }
   )
 }

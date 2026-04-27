@@ -9,70 +9,57 @@ const socialLinks = [
   { name: "GitHub", icon: Github, href: siteConfig.links.github },
   { name: "LinkedIn", icon: Linkedin, href: siteConfig.links.linkedin },
   { name: "Twitter", icon: Twitter, href: siteConfig.links.twitter },
-  { name: "Email", icon: Mail, href: `mailto:${siteConfig.links.email}` },
+  { name: "Email", icon: Mail, href: `mailto:${siteConfig.email}` },
 ]
 
 export function Footer() {
-  const footerRef = useRef(null)
-  const isInView = useInView(footerRef, { once: true, margin: "-50px" })
+  const currentYear = new Date().getFullYear()
 
   return (
-    <motion.footer
-      ref={footerRef}
-      className="px-6 py-12"
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-      transition={{ duration: 0.6 }}
-    >
-      <div className="mx-auto max-w-6xl">
-        {/* Mobile social links */}
-        <motion.div 
-          className="flex justify-center gap-6 md:hidden mb-8"
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          {socialLinks.map((social, index) => (
-            <motion.a
-              key={social.name}
-              href={social.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground transition-colors hover:text-primary"
-              aria-label={social.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ delay: 0.3 + index * 0.1 }}
-              whileHover={{ y: -4, scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-            >
-              <social.icon className="h-5 w-5" />
-            </motion.a>
-          ))}
-        </motion.div>
+    <footer className="px-6 py-12 border-t border-border/50">
+      <div className="mx-auto max-w-5xl">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="space-y-4 text-center md:text-left">
+            <p className="font-mono text-sm text-muted-foreground">
+              Designed & Built by <span className="text-foreground font-medium">{siteConfig.name}</span>
+            </p>
+            <div className="flex items-center justify-center md:justify-start gap-2 text-xs text-muted-foreground">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              Available for Freelance • {currentYear}
+            </div>
+          </div>
 
-        <motion.div 
-          className="text-center"
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <motion.a
-            href={siteConfig.links.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-mono text-sm text-muted-foreground transition-colors hover:text-primary"
-            whileHover={{ color: "var(--primary)" }}
-          >
-            <motion.span
-              initial={{ opacity: 0.8 }}
-              whileHover={{ opacity: 1 }}
+          <div className="flex items-center gap-6">
+            <a 
+              href={siteConfig.links.github} 
+              target="_blank" 
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="GitHub"
             >
-              Designed & Built by {siteConfig.name}
-            </motion.span>
-          </motion.a>
-        </motion.div>
+              <Github className="w-5 h-5" />
+            </a>
+            <a 
+              href={siteConfig.links.linkedin} 
+              target="_blank" 
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="w-5 h-5" />
+            </a>
+            <a 
+              href={`mailto:${siteConfig.email}`} 
+              className="text-muted-foreground hover:text-primary transition-colors"
+              aria-label="Email"
+            >
+              <Mail className="w-5 h-5" />
+            </a>
+          </div>
+        </div>
       </div>
-    </motion.footer>
+    </footer>
   )
 }
+

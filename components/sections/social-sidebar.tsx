@@ -28,7 +28,7 @@ const itemVariants: Variants = {
     x: 0,
     transition: {
       duration: 0.5,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 }
@@ -40,7 +40,7 @@ const lineVariants: Variants = {
     transition: {
       duration: 0.6,
       delay: 1.5,
-      ease: [0.22, 1, 0.36, 1],
+      ease: [0.22, 1, 0.36, 1] as const,
     },
   },
 }
@@ -85,7 +85,7 @@ export function SocialSidebar() {
         transition={{ delay: 1.2 }}
       >
         <motion.a
-          href={`mailto:${siteConfig.links.email}`}
+          href={`mailto:${siteConfig.email}`}
           className="font-mono text-sm text-muted-foreground transition-colors hover:text-primary"
           style={{ writingMode: "vertical-rl" }}
           initial={{ opacity: 0, y: 20 }}
@@ -93,13 +93,13 @@ export function SocialSidebar() {
           transition={{ delay: 1.3, duration: 0.5 }}
           whileHover={{ y: -4, color: "var(--primary)" }}
         >
-          {siteConfig.links.email}
+          {siteConfig.email}
         </motion.a>
         <motion.div 
           className="h-24 w-px bg-muted-foreground"
           initial={{ scaleY: 0, originY: 1 }}
           animate={{ scaleY: 1 }}
-          transition={{ delay: 1.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ delay: 1.5, duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
         />
       </motion.div>
     </>

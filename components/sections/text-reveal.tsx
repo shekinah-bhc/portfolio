@@ -24,7 +24,7 @@ export function TextReveal({ children, className = "", delay = 0 }: TextRevealPr
             animate={isInView ? { y: 0 } : { y: "100%" }}
             transition={{
               duration: 0.5,
-              ease: [0.22, 1, 0.36, 1],
+              ease: [0.22, 1, 0.36, 1] as const,
               delay: delay + i * 0.04,
             }}
           >
@@ -58,7 +58,7 @@ export function CharacterReveal({ children, className = "", delay = 0 }: Charact
             animate={isInView ? { y: 0, opacity: 1 } : { y: "100%", opacity: 0 }}
             transition={{
               duration: 0.4,
-              ease: [0.22, 1, 0.36, 1],
+              ease: [0.22, 1, 0.36, 1] as const,
               delay: delay + i * 0.02,
             }}
           >

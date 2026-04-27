@@ -1,18 +1,28 @@
 "use client"
 
-import { motion, useInView, useScroll, useTransform } from "framer-motion"
-import { useRef } from "react"
+import { motion } from "framer-motion"
+import { useInView } from "react-intersection-observer"
+import { siteConfig } from "@/lib/constants"
+import { TechBadge } from "./tech-badge"
 import { TextReveal } from "./text-reveal"
 
-const skills = [
-  "JavaScript (ES6+)",
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Node.js",
-  "Tailwind CSS",
-  "PostgreSQL",
-  "GraphQL",
+const skillGroups = [
+  {
+    name: "Frontend",
+    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "GSAP", "Three.js"]
+  },
+  {
+    name: "Backend",
+    skills: ["Node.js", "Express", "PHP", "MySQL", "MongoDB"]
+  },
+  {
+    name: "Tools",
+    skills: ["Redux Toolkit", "Zod", "AWS S3", "Git", "Vercel", "CCAvenue"]
+  },
+  {
+    name: "Design",
+    skills: ["shadcn/ui", "Figma basics", "Dark/Light theming", "Responsive UI"]
+  }
 ]
 
 const containerVariants = {
@@ -33,163 +43,77 @@ const itemVariants = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: [0.22, 1, 0.36, 1] as const,
+      ease: [0.22, 1, 0.36, 1] as const
     },
   },
 }
 
-const skillVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.4,
-      ease: [0.22, 1, 0.36, 1] as const,
-      delay: i * 0.05,
-    },
-  }),
-}
-
 export function About() {
-  const sectionRef = useRef(null)
-  const imageRef = useRef(null)
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
-  const imageInView = useInView(imageRef, { once: true, margin: "-50px" })
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.2,
   })
 
-  const backgroundY = useTransform(scrollYProgress, [0, 1], [100, -100])
-
   return (
-    <section id="about" className="relative px-6 py-24 overflow-hidden">
-      {/* Parallax background element */}
+    <section id="about" className="relative px-6 py-24">
       <motion.div
-        style={{ y: backgroundY }}
-        className="absolute right-0 top-1/4 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10"
-      />
-
-      <motion.div
-        ref={sectionRef}
+        ref={ref}
         variants={containerVariants}
         initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="mx-auto max-w-4xl"
+        animate={inView ? "visible" : "hidden"}
+        className="mx-auto max-w-5xl"
       >
-        {/* Section heading with line animation */}
-        <motion.h2 
-          variants={itemVariants}
-          className="mb-12 flex items-center gap-4 text-2xl font-bold text-foreground sm:text-3xl"
-        >
-          <span className="font-mono text-xl text-primary">01.</span>
-          <TextReveal>About Me</TextReveal>
-          <motion.span 
-            className="h-px flex-1 bg-border origin-left"
-            initial={{ scaleX: 0 }}
-            animate={isInView ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          />
-        </motion.h2>
+        <div className="grid gap-16 lg:grid-cols-5">
+          {/* Bio Content */}
+          <div className="lg:col-span-3 space-y-8">
+            <motion.h2 
+              variants={itemVariants}
+              className="flex items-center gap-4 text-3xl font-bold text-foreground sm:text-4xl"
+            >
+              <TextReveal>About Me</TextReveal>
+              <div className="h-px flex-1 bg-border" />
+            </motion.h2>
 
-        <div className="grid gap-12 lg:grid-cols-3">
-          {/* Content */}
-          <motion.div 
-            variants={containerVariants}
-            className="space-y-4 lg:col-span-2"
-          >
-            <motion.p 
-              variants={itemVariants}
-              className="leading-relaxed text-muted-foreground"
-            >
-              Hello! My name is <span className="text-primary font-medium">Your Name</span> and I enjoy 
-              creating things that live on the internet. My interest in web development started 
-              back in 2012 when I decided to try editing custom Tumblr themes — turns out hacking 
-              together a custom reblog button taught me a lot about HTML &amp; CSS!
-            </motion.p>
-            <motion.p 
-              variants={itemVariants}
-              className="leading-relaxed text-muted-foreground"
-            >
-              Fast-forward to today, and I&apos;ve had the privilege of working at{" "}
-              <a href="#" className="text-primary hover:underline">a start-up</a>,{" "}
-              <a href="#" className="text-primary hover:underline">a large corporation</a>, and{" "}
-              <a href="#" className="text-primary hover:underline">a design agency</a>. My main 
-              focus these days is building accessible, inclusive products and digital experiences.
-            </motion.p>
-            <motion.p 
-              variants={itemVariants}
-              className="leading-relaxed text-muted-foreground"
-            >
-              Here are a few technologies I&apos;ve been working with recently:
-            </motion.p>
+            <motion.div variants={itemVariants} className="space-y-6 text-lg text-muted-foreground leading-relaxed">
+              <p>
+                I am a <span className="text-primary font-medium">Full Stack Web Developer</span> based in Tamil Nadu, India, with a passion for building high-performance, visually stunning web applications. My journey in tech led me to complete my MCA at Bishop Heber College, where I honed my skills in both frontend and backend development.
+              </p>
+              <p>
+                I specialize in creating <span className="text-foreground">production-ready sites</span> that balance aesthetic design with technical excellence. Whether it's a creative agency website or a complex institutional portal, I focus on delivering polished results that exceed expectations.
+              </p>
+              <p>
+                My approach combines <span className="text-foreground">modern frameworks</span> like Next.js 15 with powerful animation tools like GSAP and Framer Motion. I am committed to clean code, scalable architecture (like Feature-Sliced Design), and performance optimization.
+              </p>
+            </motion.div>
+          </div>
 
-            {/* Skills with staggered animation */}
-            <motion.ul 
-              className="mt-4 grid grid-cols-2 gap-2"
-              variants={containerVariants}
+          {/* Skills Groups */}
+          <div className="lg:col-span-2 space-y-8">
+            <motion.h3 
+              variants={itemVariants}
+              className="text-xl font-bold text-foreground"
             >
-              {skills.map((skill, index) => (
-                <motion.li
-                  key={skill}
-                  custom={index}
-                  variants={skillVariants}
-                  className="flex items-center gap-2 font-mono text-sm text-muted-foreground group"
-                  whileHover={{ x: 5 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                >
-                  <motion.span 
-                    className="text-primary"
-                    whileHover={{ scale: 1.2 }}
-                  >
-                    ▹
-                  </motion.span>
-                  {skill}
-                </motion.li>
+              Skills & Technologies
+            </motion.h3>
+
+            <div className="grid gap-6">
+              {skillGroups.map((group) => (
+                <motion.div key={group.name} variants={itemVariants} className="space-y-3">
+                  <h4 className="text-sm font-mono text-primary font-semibold uppercase tracking-wider">
+                    {group.name}
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {group.skills.map((skill) => (
+                      <TechBadge key={skill} tech={skill} showIcon={false} />
+                    ))}
+                  </div>
+                </motion.div>
               ))}
-            </motion.ul>
-          </motion.div>
-
-          {/* Profile image with reveal animation */}
-          <motion.div 
-            ref={imageRef}
-            className="relative mx-auto w-64 lg:w-full"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={imageInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }}
-          >
-            <div className="group relative">
-              {/* Image container with clip-path reveal */}
-              <motion.div 
-                className="relative z-10 overflow-hidden rounded-lg"
-                initial={{ clipPath: "inset(0 100% 0 0)" }}
-                animate={imageInView ? { clipPath: "inset(0 0% 0 0)" } : { clipPath: "inset(0 100% 0 0)" }}
-                transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] as const }}
-              >
-                <div className="aspect-square bg-linear-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                  <div className="text-6xl font-bold text-primary/30">YN</div>
-                </div>
-                <motion.div 
-                  className="absolute inset-0 bg-primary/20"
-                  whileHover={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </motion.div>
-
-              {/* Animated border */}
-              <motion.div 
-                className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-lg border-2 border-primary"
-                initial={{ opacity: 0, x: 20, y: 20 }}
-                animate={imageInView ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: 20, y: 20 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                whileHover={{ x: -4, y: -4 }}
-              />
             </div>
-          </motion.div>
+          </div>
         </div>
       </motion.div>
     </section>
   )
 }
+
