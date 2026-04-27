@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
-import { Github, Linkedin, Mail, Send, Loader2 } from "lucide-react"
+import { Github, Linkedin, Mail, Send, Loader2, Sparkles } from "lucide-react"
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -38,7 +38,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } as const,
 }
 
 export function Contact() {
@@ -46,11 +46,7 @@ export function Contact() {
   
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      message: "",
-    },
+    defaultValues: { name: "", email: "", message: "" },
   })
 
   async function onSubmit(data: ContactFormValues) {
@@ -61,12 +57,11 @@ export function Contact() {
         body: JSON.stringify(data),
         headers: { "Content-Type": "application/json" },
       })
-
       if (response.ok) {
-        toast.success("Message sent successfully!")
+        toast.success("Message sent! I'll get back to you soon.")
         form.reset()
       } else {
-        toast.error("Failed to send message. Please try again.")
+        toast.error("Failed to send message.")
       }
     } catch (error) {
       toast.error("Something went wrong.")
@@ -76,178 +71,190 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="px-6 py-24 bg-secondary/5">
+    <section id="contact" className="relative px-6 py-32 overflow-hidden">
+      {/* Background Gradient Blobs */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[120px] -z-10" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] -z-10" />
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="mx-auto max-w-5xl"
+        className="mx-auto max-w-6xl"
       >
-        <div className="grid gap-16 lg:grid-cols-2">
-          {/* Header & Info */}
-          <div className="space-y-8">
-            <div className="space-y-4">
-              <motion.h2 variants={itemVariants} className="text-4xl font-bold tracking-tight sm:text-5xl">
-                Let's Work Together
+        <div className="grid gap-16 lg:grid-cols-2 items-start">
+          
+          {/* Content Side */}
+          <div className="space-y-10">
+            <div className="space-y-6">
+              
+              <motion.h2 variants={itemVariants} className="text-5xl md:text-6xl font-bold tracking-tight">
+                Let’s build <span className="bg-linear-to-r from-primary to-blue-400 bg-clip-text text-transparent">something great</span> together.
               </motion.h2>
-              <motion.p variants={itemVariants} className="text-lg text-muted-foreground max-w-md">
-                Have a project in mind or just want to say hello? I'm available for freelance and full-time opportunities.
+              
+              <motion.p variants={itemVariants} className="text-xl text-muted-foreground leading-relaxed max-w-md">
+                Have an idea? I’m here to help you turn it into a digital reality. Reach out via the form or my socials.
               </motion.p>
             </div>
 
-            <motion.div variants={itemVariants} className="space-y-6 pt-8">
+            <motion.div variants={itemVariants} className="grid gap-4">
               <a 
                 href={`mailto:${siteConfig.email}`}
-                className="flex items-center gap-4 text-foreground hover:text-primary transition-colors group"
+                className="group flex items-center gap-4 p-4 rounded-2xl bg-secondary/20 border border-border/50 hover:border-primary/50 transition-all"
               >
-                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Mail className="w-5 h-5 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">
+                  <Mail className="w-5 h-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-mono text-muted-foreground uppercase">Email Me</p>
-                  <p className="font-medium">{siteConfig.email}</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Email Me</p>
+                  <p className="text-lg font-semibold">{siteConfig.email}</p>
                 </div>
               </a>
 
-              <div className="flex gap-4 pt-4">
-                <a 
-                  href={siteConfig.links.github}
-                  target="_blank"
-                  className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-all shadow-sm"
-                >
-                  <Github className="w-5 h-5" />
-                </a>
-                <a 
-                  href={siteConfig.links.linkedin}
-                  target="_blank"
-                  className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:border-primary hover:text-primary transition-all shadow-sm"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
+              <div className="flex gap-4">
+                {[
+                  { icon: Github, href: siteConfig.links.github },
+                  { icon: Linkedin, href: siteConfig.links.linkedin }
+                ].map((social, i) => (
+                  <a 
+                    key={i}
+                    href={social.href}
+                    target="_blank"
+                    className="w-14 h-14 rounded-2xl border border-border flex items-center justify-center hover:bg-foreground hover:text-background transition-all"
+                  >
+                    <social.icon className="w-6 h-6" />
+                  </a>
+                ))}
               </div>
             </motion.div>
           </div>
 
-          {/* Form */}
-          <motion.div variants={itemVariants} className="bg-background p-8 rounded-3xl border border-border shadow-xl shadow-primary/5">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="grid gap-6 sm:grid-cols-2">
+          {/* Form Side */}
+          <motion.div 
+            variants={itemVariants} 
+            className="relative group"
+          >
+          {/* Animated Border Gradient Glow - Increased Opacity and Blur */}
+            <div className="absolute -inset-1 bg-linear-to-r from-primary via-blue-500 to-purple-600 rounded-4xl blur-xl opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt" />
+            <div className="relative bg-background/80 backdrop-blur-xl p-8 md:p-10 rounded-4xl border border-white/10 shadow-2xl">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-foreground/70">Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="John Doe" {...field} className="bg-secondary/30 border-none h-12 rounded-xl focus-visible:ring-primary/50" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-foreground/70">Email</FormLabel>
+                          <FormControl>
+                            <Input placeholder="john@example.com" {...field} className="bg-secondary/30 border-none h-12 rounded-xl focus-visible:ring-primary/50" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  <div className="grid gap-6 sm:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="projectType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-foreground/70">Project Type</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="bg-secondary/30 border-none h-12 rounded-xl focus:ring-primary/50">
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="rounded-xl">
+                              <SelectItem value="Website">Website</SelectItem>
+                              <SelectItem value="Web App">Web App</SelectItem>
+                              <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="budget"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-foreground/70">Budget</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="bg-secondary/30 border-none h-12 rounded-xl focus:ring-primary/50">
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent className="rounded-xl">
+                              <SelectItem value="<₹50K">&lt;₹50K</SelectItem>
+                              <SelectItem value="₹50K–₹1L">₹50K–₹1L</SelectItem>
+                              <SelectItem value="₹1L+">₹1L+</SelectItem>
+                              <SelectItem value="Let's discuss">Let's discuss</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
                   <FormField
                     control={form.control}
-                    name="name"
+                    name="message"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel className="text-foreground/70">Message</FormLabel>
                         <FormControl>
-                          <Input placeholder="Your good name" {...field} className="rounded-xl" />
+                          <Textarea 
+                            placeholder="Tell me about your project..." 
+                            className="bg-secondary/30 border-none min-h-[120px] rounded-xl focus-visible:ring-primary/50 resize-none"
+                            {...field} 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input placeholder="hello@example.com" {...field} className="rounded-xl" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
 
-                <div className="grid gap-6 sm:grid-cols-2">
-                  <FormField
-                    control={form.control}
-                    name="projectType"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Project Type</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger className="rounded-xl">
-                              <SelectValue placeholder="Select type" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="Website">Website</SelectItem>
-                            <SelectItem value="Web App">Web App</SelectItem>
-                            <SelectItem value="Other">Other</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmitting}
+                    className="w-full h-14 rounded-xl text-lg font-bold bg-linear-to-r from-primary to-blue-600 hover:opacity-90 transition-all shadow-lg shadow-primary/25 group"
+                  >
+                    {isSubmitting ? (
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                    ) : (
+                      <>
+                        Send Message
+                        <Send className="w-5 h-5 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      </>
                     )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="budget"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Budget Range</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger className="rounded-xl">
-                              <SelectValue placeholder="Select budget" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="<₹50K">&lt;₹50K</SelectItem>
-                            <SelectItem value="₹50K–₹1L">₹50K–₹1L</SelectItem>
-                            <SelectItem value="₹1L+">₹1L+</SelectItem>
-                            <SelectItem value="Let's discuss">Let's discuss</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Message</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Tell me about your project..." 
-                          className="min-h-[120px] rounded-xl"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button 
-                  type="submit" 
-                  disabled={isSubmitting}
-                  className="w-full rounded-xl py-6 text-lg font-bold group"
-                >
-                  {isSubmitting ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
-                    <>
-                      Send Message
-                      <Send className="w-4 h-4 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                    </>
-                  )}
-                </Button>
-              </form>
-            </Form>
+                  </Button>
+                </form>
+              </Form>
+            </div>
           </motion.div>
         </div>
       </motion.div>
     </section>
   )
 }
-

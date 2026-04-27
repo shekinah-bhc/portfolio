@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button"
 import { TechBadge } from "@/components/sections/tech-badge"
 import { motion } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
+import { ProjectVideoShowcase } from "@/components/sections/project-video-showcase"
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>
@@ -25,71 +26,90 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   return (
     <main className="min-h-screen bg-background pt-32 pb-20 px-6">
       <div className="mx-auto max-w-5xl">
-        {/* Navigation */}
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="mb-12"
+        {/* Fixed Navigation */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="fixed top-8 left-8 z-50"
         >
           <Link
             href="/#projects"
-            className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors group"
+            className="flex h-14 w-14 items-center justify-center rounded-full bg-background/40 backdrop-blur-xl border border-border/50 text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all group shadow-2xl"
+            title="Back to projects"
           >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            Back to projects
+            <ArrowLeft className="h-6 w-6 transition-transform group-hover:-translate-x-1" />
           </Link>
         </motion.div>
 
-        {/* Hero Section */}
-        <div className="grid gap-12 lg:grid-cols-12 mb-20">
-          <div className="lg:col-span-7 space-y-6">
-            <div className="flex flex-wrap items-center gap-3">
-              <Badge variant="secondary" className="bg-primary/10 text-primary font-mono lowercase tracking-tighter">
-                {project.type}
-              </Badge>
-              {project.status === "Live" && (
-                <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20 flex items-center gap-1.5 rounded-full">
-                  <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-                  Live Shell
+        {/* 1. Cinematic Video Hero */}
+        {(project.videoUrl || (project.videoUrls && project.videoUrls.length > 0)) && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-24"
+          >
+            <ProjectVideoShowcase
+              videoUrl={project.videoUrl}
+              videoUrls={project.videoUrls}
+              title={project.title}
+              subtitle={project.type}
+            />
+          </motion.div>
+        )}
+
+        {/* 2. Project Identity & Overview */}
+        <div className="grid gap-12 lg:grid-cols-12 mb-32 items-start">
+          <div className="lg:col-span-8 space-y-8">
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                {project.status === "Live" && (
+                  <Badge className="bg-green-500/10 text-green-500 hover:bg-green-500/20 border-green-500/20 flex items-center gap-1.5 rounded-full px-3">
+                    <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
+                    Production Ready
+                  </Badge>
+                )}
+                <Badge variant="outline" className="font-mono lowercase tracking-tighter opacity-60">
+                  {project.slug}
                 </Badge>
-              )}
+              </div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                className="text-5xl font-bold tracking-tight sm:text-7xl lg:text-8xl"
+              >
+                {project.title}
+              </motion.h1>
             </div>
-            
-            <motion.h1 
+
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-4xl font-bold tracking-tight sm:text-6xl"
-            >
-              {project.title}
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-xl text-muted-foreground leading-relaxed italic"
+              className="text-2xl text-muted-foreground leading-relaxed max-w-3xl italic"
             >
               "{project.description}"
             </motion.p>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="flex flex-wrap gap-4 pt-4"
+              className="flex flex-wrap gap-4 pt-6"
             >
               {project.liveUrl && (
-                <Button asChild size="lg" className="rounded-full px-8 shadow-lg shadow-primary/20">
+                <Button asChild size="lg" className="rounded-full px-10 h-14 text-lg shadow-xl shadow-primary/20">
                   <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                    <Globe className="h-4 w-4 mr-2" />
-                    View Live Project
+                    <Globe className="h-5 w-5 mr-3" />
+                    Launch Live Site
                   </a>
                 </Button>
               )}
               {project.githubUrl && (
-                <Button asChild variant="outline" size="lg" className="rounded-full px-8 border-primary/20">
+                <Button asChild variant="outline" size="lg" className="rounded-full px-10 h-14 text-lg border-primary/20">
                   <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                    <ShieldCheck className="h-4 w-4 mr-2" />
+                    <ShieldCheck className="h-5 w-5 mr-3" />
                     Private Repo
                   </a>
                 </Button>
@@ -97,10 +117,10 @@ export default function ProjectPage({ params }: ProjectPageProps) {
             </motion.div>
           </div>
 
-          <div className="lg:col-span-5 flex flex-col justify-end">
-            <div className="rounded-3xl border border-border bg-secondary/20 p-8 space-y-6">
+          <div className="lg:col-span-4 lg:sticky lg:top-32">
+            <div className="rounded-4xl border border-border bg-secondary/10 p-8 space-y-8 backdrop-blur-sm">
               <div className="space-y-4">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-primary/60">The Tech Stack</h4>
+                <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-primary/60">Core Technologies</h4>
                 <div className="flex flex-wrap gap-2">
                   {project.stack.map((tech) => (
                     <TechBadge key={tech} tech={tech} />
@@ -153,7 +173,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
                 {project.highlights.map((highlight, i) => (
                   <div key={i} className="flex gap-4 p-6 rounded-2xl bg-background border border-border shadow-sm group hover:border-primary/20 transition-colors">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 text-primary font-bold text-sm">
-                      0{i+1}
+                      0{i + 1}
                     </div>
                     <p className="text-muted-foreground self-center">{highlight}</p>
                   </div>
@@ -180,7 +200,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
               <div className="p-8 rounded-3xl border border-border bg-background space-y-6">
                 <h3 className="font-bold">Next Project</h3>
-                <Link 
+                <Link
                   href="/#projects"
                   className="block p-4 rounded-2xl bg-secondary/30 hover:bg-secondary/50 transition-colors border border-border group"
                 >

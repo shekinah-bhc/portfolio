@@ -2,118 +2,97 @@
 
 import { motion } from "framer-motion"
 import { useInView } from "react-intersection-observer"
-import { siteConfig } from "@/lib/constants"
 import { TechBadge } from "./tech-badge"
 import { TextReveal } from "./text-reveal"
 
+// Added descriptions for a bit more "meat" in the UI
 const skillGroups = [
   {
     name: "Frontend",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "GSAP", "Three.js"]
+    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Framer Motion", "Three.js"],
+    gradient: "from-blue-500/10 to-cyan-500/10"
   },
   {
     name: "Backend",
-    skills: ["Node.js", "Express", "PHP", "MySQL", "MongoDB"]
+    skills: ["Node.js", "Express", "PHP", "MySQL", "MongoDB"],
+    gradient: "from-green-500/10 to-emerald-500/10"
   },
   {
-    name: "Tools",
-    skills: ["Redux Toolkit", "Zod", "AWS S3", "Git", "Vercel", "CCAvenue"]
-  },
-  {
-    name: "Design",
-    skills: ["shadcn/ui", "Figma basics", "Dark/Light theming", "Responsive UI"]
+    name: "Tools & DevOps",
+    skills: ["Git", "Vercel", "AWS S3", "Redux", "Zod"],
+    gradient: "from-orange-500/10 to-red-500/10"
   }
 ]
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.22, 1, 0.36, 1] as const
-    },
-  },
-}
-
 export function About() {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.2,
-  })
+  const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.1 })
 
   return (
-    <section id="about" className="relative px-6 py-24">
+    <section id="about" className="relative px-6 py-32 overflow-hidden">
+      {/* Subtle Background Glow */}
+      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-primary/5 rounded-full blur-[120px] -z-10" />
+      
       <motion.div
         ref={ref}
-        variants={containerVariants}
         initial="hidden"
         animate={inView ? "visible" : "hidden"}
-        className="mx-auto max-w-5xl"
+        className="mx-auto max-w-6xl"
       >
-        <div className="grid gap-16 lg:grid-cols-5">
-          {/* Bio Content */}
-          <div className="lg:col-span-3 space-y-8">
-            <motion.h2 
-              variants={itemVariants}
-              className="flex items-center gap-4 text-3xl font-bold text-foreground sm:text-4xl"
-            >
-              <TextReveal>About Me</TextReveal>
-              <div className="h-px flex-1 bg-border" />
-            </motion.h2>
+        <div className="flex flex-col lg:flex-row gap-16">
+          
+          {/* Left Side: Narrative */}
+          <div className="lg:w-3/5 space-y-12">
+            <div className="space-y-4">
+              <motion.h2 
+                variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
+                className="text-4xl font-bold tracking-tight sm:text-5xl"
+              >
+                <TextReveal>Crafting Digital</TextReveal>
+                <span className="text-primary block">Experiences.</span>
+              </motion.h2>
+              <div className="h-1.5 w-20 bg-primary rounded-full" />
+            </div>
 
-            <motion.div variants={itemVariants} className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-              <p>
-                I am a <span className="text-primary font-medium">Full Stack Web Developer</span> based in Tamil Nadu, India, with a passion for building high-performance, visually stunning web applications. My journey in tech led me to complete my MCA at Bishop Heber College, where I honed my skills in both frontend and backend development.
+            <motion.div 
+              variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+              className="space-y-6 text-lg text-muted-foreground"
+            >
+              <p className="leading-relaxed">
+                I’m a <span className="font-semibold text-foreground underline decoration-primary/30">Full Stack Developer</span> based in Tamil Nadu. I bridge the gap between complex backend logic and fluid, front-end motion.
               </p>
               <p>
-                I specialize in creating <span className="text-foreground">production-ready sites</span> that balance aesthetic design with technical excellence. Whether it's a creative agency website or a complex institutional portal, I focus on delivering polished results that exceed expectations.
-              </p>
-              <p>
-                My approach combines <span className="text-foreground">modern frameworks</span> like Next.js 15 with powerful animation tools like GSAP and Framer Motion. I am committed to clean code, scalable architecture (like Feature-Sliced Design), and performance optimization.
+                My philosophy is simple: **Performance shouldn't sacrifice personality.** I use Next.js 15 and GSAP to build interfaces that feel "alive" while maintaining lighthouse scores that stay in the green.
               </p>
             </motion.div>
           </div>
 
-          {/* Skills Groups */}
-          <div className="lg:col-span-2 space-y-8">
-            <motion.h3 
-              variants={itemVariants}
-              className="text-xl font-bold text-foreground"
-            >
-              Skills & Technologies
-            </motion.h3>
-
-            <div className="grid gap-6">
-              {skillGroups.map((group) => (
-                <motion.div key={group.name} variants={itemVariants} className="space-y-3">
-                  <h4 className="text-sm font-mono text-primary font-semibold uppercase tracking-wider">
-                    {group.name}
-                  </h4>
-                  <div className="flex flex-wrap gap-2">
-                    {group.skills.map((skill) => (
-                      <TechBadge key={skill} tech={skill} showIcon={false} />
-                    ))}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+          {/* Right Side: Skill Bento-ish Cards */}
+          <div className="lg:w-2/5 grid gap-4">
+            {skillGroups.map((group, i) => (
+              <motion.div
+                key={group.name}
+                variants={{
+                  hidden: { opacity: 0, x: 30 },
+                  visible: { opacity: 1, x: 0, transition: { delay: i * 0.1 } }
+                }}
+                className={`p-6 rounded-2xl border border-border/50 bg-linear-to-br ${group.gradient} backdrop-blur-sm hover:border-primary/50 transition-colors duration-300 group`}
+              >
+                <h4 className="text-xs font-bold uppercase tracking-widest text-primary mb-4">
+                  {group.name}
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {group.skills.map((skill) => (
+                    <div key={skill} className="transform transition-transform hover:scale-105">
+                      <TechBadge tech={skill} showIcon={false} />
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
+
         </div>
       </motion.div>
     </section>
   )
 }
-

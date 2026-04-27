@@ -25,3 +25,8 @@ __v0_jsx-dev-runtime.ts
 .snowflake/
 .v0-trash/
 next.user-config.*
+
+package-lock.json
+package.json
+.nvmrc
+.nvmrc*
