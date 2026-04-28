@@ -3,7 +3,10 @@ export interface Project {
   slug: string
   title: string
   type: string
+  category?: string
   status: 'Live' | 'Seasonal' | 'Private'
+  year?: string
+  role?: string
   liveUrl?: string
   githubUrl?: string
   client?: string
@@ -20,6 +23,8 @@ export interface Project {
     author: string
     role: string
   }
+  videoUrl?: string
+  videoUrls?: string[]
 }
 
 export const projects: Project[] = [
@@ -28,8 +33,11 @@ export const projects: Project[] = [
     slug: "reborn-interactive",
     title: "Reborn Interactive",
     type: "Client Work",
+    category: "Creative Agency Website",
     status: "Live",
-    liveUrl: "https://reborninteractive.in", // Placeholder, user said [reborn live URL]
+    year: "2024",
+    role: "Full-Stack Engineer",
+    liveUrl: "https://reborninteractive.in",
     stack: ["Next.js 15", "TypeScript", "GSAP", "ScrollTrigger", "Three.js", "i18n", "feature-sliced architecture"],
     description: "Production website built from scratch for a creative agency. Multi-language, GPU-accelerated animations, custom Three.js visuals.",
     whatIDid: {
@@ -46,39 +54,19 @@ export const projects: Project[] = [
       quote: "Shekinah delivered a polished, production-ready site that exceeded our expectations.",
       author: "Client",
       role: "Reborn Interactive"
-    }
-  },
-  {
-    id: "bhc-admissions",
-    slug: "bhc-admissions",
-    title: "BHC Admissions Portal",
-    type: "Client Work",
-    status: "Seasonal",
-    client: "Bishop Heber College",
-    stack: ["React", "Redux Toolkit", "TypeScript", "Node.js", "Express", "MongoDB", "AWS S3", "jsPDF", "Three.js"],
-    description: "Full-stack admissions system for an engineering college. Multi-step form with conditional Zod validation, 3 user roles, admin analytics dashboard.",
-    whatIDid: {
-      design: "Multi-step form UX, candidate dashboard, admin analytics with Three.js globe",
-      frontend: "Redux Toolkit state, Zod superRefine conditional logic, PDF receipt generation",
-      backend: "Node.js/Express REST API, MongoDB, AWS S3 presigned URLs, connect-mongo sessions",
     },
-    highlights: [
-      "Handled intensive intake seasons",
-      "Admin analytics with Three.js globe",
-      "Conditional Zod validation for multi-step forms"
-    ],
-    testimonial: {
-      quote: "The admissions portal handled our entire intake season without a single issue.",
-      author: "Admin",
-      role: "Bishop Heber College"
-    }
+    videoUrls: ["/assets/video/about.mp4", "/assets/video/dashboard_globe.mp4"]
   },
+
   {
     id: "alumni-portal",
     slug: "alumni-portal",
-    title: "Alumni Registration & Payment Portal",
+    title: "Alumni Dashboard",
     type: "Client Work",
+    category: "Full-Stack Web App",
     status: "Private",
+    year: "2024",
+    role: "Full-Stack Developer",
     client: "Bishop Heber College",
     stack: ["React", "TypeScript", "Redux Toolkit", "PHP", "MySQL", "CCAvenue", "AWS S3", "@react-pdf/renderer"],
     description: "Full-stack alumni registration and payment system with CCAvenue gateway integration, document upload, and a matched payments dashboard.",
@@ -91,7 +79,38 @@ export const projects: Project[] = [
       "Secure CCAvenue payment integration",
       "Automated PDF receipt generation",
       "Real-time matched payments dashboard"
-    ]
+    ],
+    videoUrls: ["/assets/video/alumni-dashboard.mp4"]
+  },
+  {
+    id: "wedding-invite-balasundar",
+    slug: "wedding-invite-balasundar",
+    title: "Wedding Invitation Website",
+    type: "Client Work",
+    category: "Interactive Microsite",
+    status: "Live",
+    year: "2024",
+    role: "Frontend Engineer",
+    liveUrl: "https://invite.balasundar.in/",
+    client: "Balasundar",
+    stack: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS"],
+    description: "Custom digital wedding invitation website with smooth animations, event details, and responsive design tailored for a modern invite experience.",
+    whatIDid: {
+      design: "Elegant invitation-style UI with typography-focused layout and smooth transitions",
+      frontend: "Animated sections using Framer Motion, responsive layout, optimized asset loading",
+      backend: "Static optimized deployment with Next.js",
+    },
+    highlights: [
+      "Smooth animated invite experience",
+      "Mobile-first responsive design",
+      "Fast-loading static deployment"
+    ],
+    testimonial: {
+      quote: "The website gave our wedding invite a modern and memorable touch.",
+      author: "Balasundar",
+      role: "Client"
+    },
+    videoUrl: "/assets/video/wedding.mp4"
   }
 ]
 
@@ -102,4 +121,3 @@ export function getProjectBySlug(slug: string): Project | undefined {
 export function getAllProjects(): Project[] {
   return projects
 }
-

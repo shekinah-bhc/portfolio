@@ -129,10 +129,41 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   )
 }
 
+import { FeatureCarousel, CarouselFeature } from "@/components/feature-carousel"
+import {
+  GlobalSearchIcon,
+  AiCloudIcon,
+  DashboardSquare01Icon,
+  CommandFreeIcons,
+} from "@hugeicons/core-free-icons"
+
+const PROJECT_IMAGES = [
+  "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200", 
+  "https://images.unsplash.com/photo-1551288049-bbda38a10ad5?q=80&w=1200",
+  "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200",
+  "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1200"
+]
+
+const PROJECT_ICONS = [
+  AiCloudIcon,
+  DashboardSquare01Icon,
+  GlobalSearchIcon,
+  CommandFreeIcons
+]
+
 export function Projects() {
   const sectionRef = useRef(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
   const projects = getAllProjects()
+
+  const projectFeatures: CarouselFeature[] = projects.map((project, idx) => ({
+    id: project.id,
+    label: project.title,
+    description: project.description,
+    image: PROJECT_IMAGES[idx % PROJECT_IMAGES.length],
+    icon: PROJECT_ICONS[idx % PROJECT_ICONS.length],
+    href: `/projects/${project.slug}`
+  }))
 
   return (
     <section id="projects" className="px-6 py-24 relative overflow-hidden">
@@ -141,41 +172,25 @@ export function Projects() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="mx-auto max-w-6xl"
+        className="mx-auto max-w-7xl"
       >
-        <div className="mb-20 space-y-4">
+        <div className=" space-y-4">
           <motion.h2 
             variants={itemVariants}
             className="text-3xl font-bold text-foreground sm:text-4xl"
           >
-            <TextReveal>Selected Projects</TextReveal>
+            <TextReveal>Featured Projects</TextReveal>
           </motion.h2>
           <motion.div 
             variants={itemVariants}
-            className="h-1 w-20 bg-primary rounded-full"
+            className="h-1 w-20 bg-primary rounded-full transition-all duration-300"
           />
         </div>
 
-        <div className="space-y-32">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
+        {/* Brand new Carousel Layout */}
+        <FeatureCarousel features={projectFeatures} />
 
-        {/* Noteworthy Grid */}
-        <div className="mt-32 border-t border-border pt-20">
-          <div className="text-center space-y-4">
-            <h3 className="text-2xl font-bold text-foreground">Other Noteworthy Work</h3>
-            <p className="text-muted-foreground">More coming soon. I'm always building something new.</p>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 opacity-40 grayscale pointer-events-none">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-48 rounded-2xl border border-dashed border-border flex items-center justify-center">
-                  <span className="font-mono text-sm uppercase tracking-widest">Project 0{i+3}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+
       </motion.div>
     </section>
   )

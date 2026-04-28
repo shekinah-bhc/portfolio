@@ -37,7 +37,7 @@ export function Blog() {
   const posts = getAllBlogPosts()
 
   return (
-    <section id="blog" className="px-6 py-24 bg-secondary/10">
+    <section id="blog" className="px-6 py-2 bg-secondary/10">
       <motion.div
         ref={sectionRef}
         variants={containerVariants}
@@ -50,7 +50,7 @@ export function Blog() {
             variants={itemVariants}
             className="text-3xl font-bold text-foreground sm:text-4xl"
           >
-            <TextReveal>Notes & Writing</TextReveal>
+            <TextReveal>Blog</TextReveal>
           </motion.h2>
           <motion.div 
             variants={itemVariants}

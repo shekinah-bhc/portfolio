@@ -1,14 +1,16 @@
-"use client"
+"use client";
 
-import { motion, Variants } from "framer-motion"
-import { useInView } from "react-intersection-observer"
-import { TextReveal } from "./text-reveal"
+import { useRef } from "react";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { Terminal, Calendar, Briefcase, GraduationCap } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const experiences = [
   {
     title: "Freelance Full Stack Developer",
     company: "Self-Employed",
     period: "2024 — Present",
+    type: "Work",
     description: [
       "Built production web applications for institutional and private clients using Next.js 15, TypeScript, and high-end animations.",
       "Developed high-performance agency websites and complex full-stack portals from scratch.",
@@ -20,115 +22,141 @@ const experiences = [
     title: "MCA (Master of Computer Applications)",
     company: "Bishop Heber College",
     period: "2022 — 2024",
+    type: "Education",
     description: [
       "Specialized in advanced web technologies and software engineering principles.",
       "Graduated with honors, focusing on building scalable full-stack applications.",
       "Participated in various technical symposiums and development workshops.",
     ],
-    skills: ["Full Stack Development", "Database Management", "Software Architecture"],
+    skills: ["Full Stack", "Software Architecture", "Distributed Systems"],
   },
-]
-
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
-    },
-  },
-}
-
-const itemVariants: Variants = {
-  hidden: { opacity: 0, x: -30 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.8,
-      ease: [0.22, 1, 0.36, 1] as const,
-    },
-  },
-}
+];
 
 export function Experience() {
-  const { ref, inView } = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  })
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  // Create a scroll-linked animation for the timeline line
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end end"],
+  });
+
+  const scaleY = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
 
   return (
-    <section id="experience" className="px-6 py-24 relative overflow-hidden">
-      <motion.div
-        ref={ref}
-        variants={containerVariants}
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        className="mx-auto max-w-5xl"
-      >
-        <div className="mb-16 flex flex-col items-center text-center space-y-4">
-          <motion.h2 
-            variants={itemVariants}
-            className="text-3xl font-bold text-foreground sm:text-4xl"
+    <section id="experience" className="px-6 py-32 bg-black relative overflow-hidden">
+      {/* Background Decorative Element */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-10" />
+
+      <div className="mx-auto max-w-5xl">
+        <div className="mb-24 space-y-4">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-2 text-primary font-mono text-sm tracking-widest uppercase"
           >
-            <TextReveal>My Professional Journey</TextReveal>
+         
+          </motion.div>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            className="text-5xl md:text-6xl font-bold text-white tracking-tighter"
+          >
+            Experience
           </motion.h2>
-          <motion.div 
-            variants={itemVariants}
-            className="h-1 w-20 bg-primary rounded-full"
-          />
         </div>
 
-        <div className="relative space-y-12 before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-linear-to-b before:from-transparent before:via-border before:to-transparent">
-          {experiences.map((exp, index) => (
+        <div ref={containerRef} className="relative">
+          {/* Animated Vertical Line */}
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-zinc-800 md:-translate-x-1/2">
             <motion.div 
-              key={index}
-              variants={itemVariants}
-              className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group"
-            >
-              {/* Dot */}
-              <div className="flex items-center justify-center w-10 h-10 rounded-full border border-border bg-background shadow-md md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-colors group-hover:border-primary group-hover:bg-primary/5">
-                <div className="w-3 h-3 rounded-full bg-border group-hover:bg-primary transition-colors" />
-              </div>
+              style={{ scaleY, originY: 0 }}
+              className="absolute inset-0 bg-linear-to-b from-primary via-indigo-500 to-transparent shadow-[0_0_15px_rgba(99,102,241,0.5)]" 
+            />
+          </div>
 
-              {/* Card */}
-              <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 rounded-2xl border border-border bg-secondary/30 backdrop-blur-sm shadow-sm transition-all group-hover:border-primary/20 group-hover:shadow-lg group-hover:shadow-primary/5">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold text-foreground">{exp.title}</h3>
-                    <p className="text-primary font-mono text-sm">{exp.company}</p>
+          <div className="space-y-20">
+            {experiences.map((exp, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.7, delay: index * 0.1 }}
+                className="relative flex flex-col md:flex-row md:justify-between items-start md:items-center group"
+              >
+                {/* Timeline Node Icon */}
+                <div className="absolute left-4 md:left-1/2 w-10 h-10 translate-x-[-19px] md:-translate-x-1/2 z-20 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:border-primary transition-colors duration-500 shadow-xl">
+                    {exp.type === "Work" ? (
+                      <Briefcase size={18} className="text-zinc-400 group-hover:text-primary transition-colors" />
+                    ) : (
+                      <GraduationCap size={18} className="text-zinc-400 group-hover:text-primary transition-colors" />
+                    )}
                   </div>
-                  <time className="text-xs font-mono text-muted-foreground bg-border/40 px-3 py-1 rounded-full whitespace-nowrap">
-                    {exp.period}
-                  </time>
                 </div>
-                
-                <ul className="space-y-3 mb-6">
-                  {exp.description.map((item, i) => (
-                    <li key={i} className="flex gap-2 text-sm text-muted-foreground/90 leading-relaxed">
-                      <span className="text-primary mt-1 shrink-0 text-[10px]">●</span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
 
-                <div className="flex flex-wrap gap-2">
-                  {exp.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-2.5 py-1 text-[10px] font-mono font-semibold uppercase tracking-wider rounded-md bg-primary/5 text-primary border border-primary/10"
-                    >
-                      {skill}
+                {/* Content Card */}
+                <div className={cn(
+                  "w-full md:w-[45%] mt-16 md:mt-0 ml-12 md:ml-0",
+                  index % 2 === 0 ? "md:text-right md:pr-12" : "md:ml-auto md:pl-12"
+                )}>
+                  {/* Fake Terminal Header for the card */}
+                  <div className={cn(
+                    "flex gap-1.5 mb-4",
+                    index % 2 === 0 ? "md:justify-end" : "justify-start"
+                  )}>
+                    <div className="w-2 h-2 rounded-full bg-zinc-800" />
+                    <div className="w-2 h-2 rounded-full bg-zinc-800" />
+                    <div className="w-2 h-2 rounded-full bg-zinc-800" />
+                  </div>
+
+                  <div className="space-y-2">
+                    <span className="text-primary font-mono text-xs font-bold uppercase tracking-widest px-3 py-1 bg-primary/10 rounded-full">
+                      {exp.period}
                     </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </motion.div>
-    </section>
-  )
-}
+                    <h3 className="text-2xl md:text-3xl font-bold text-white pt-2">
+                      {exp.title}
+                    </h3>
+                    <p className="text-zinc-400 font-medium text-lg italic">
+                      {exp.company}
+                    </p>
+                  </div>
 
+                  <ul className={cn(
+                    "mt-6 space-y-4 text-zinc-500",
+                    index % 2 === 0 ? "md:items-end" : "items-start"
+                  )}>
+                    {exp.description.map((item, i) => (
+                      <li key={i} className="text-sm leading-relaxed max-w-md ml-auto mr-auto md:ml-0 md:mr-0">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className={cn(
+                    "flex flex-wrap gap-2 mt-8",
+                    index % 2 === 0 ? "md:justify-end" : "justify-start"
+                  )}>
+                    {exp.skills.map((skill) => (
+                      <span
+                        key={skill}
+                        className="px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-tighter rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 hover:border-primary/50 hover:text-primary transition-all duration-300"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

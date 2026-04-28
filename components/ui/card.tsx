@@ -2,16 +2,33 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
-function Card({ className, ...props }: React.ComponentProps<'div'>) {
+function Card({ className, children, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
-      data-slot="card"
-      className={cn(
-        'bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm',
-        className,
-      )}
+      data-slot="card-container"
+      className="group relative w-full h-full transition-all duration-500 rounded-xl"
       {...props}
-    />
+    >
+      {/* Skewed gradient panels from gradient-card-showcase */}
+      <span className="absolute top-0 right-[20px] w-1/2 h-full rounded-xl transform skew-x-15deg transition-all duration-500 group-hover:skew-x-0 group-hover:right-[10px] group-hover:w-[calc(100%-20px)] bg-accenture-gradient" />
+      <span className="absolute top-0 right-[20px] w-1/2 h-full rounded-xl transform skew-x-15deg blur-[30px] transition-all duration-500 group-hover:skew-x-0 group-hover:right-[10px] group-hover:w-[calc(100%-20px)] bg-accenture-gradient opacity-60 group-hover:opacity-100" />
+      
+      {/* Animated blurs */}
+      <span className="pointer-events-none absolute inset-0 z-10 overflow-hidden rounded-xl">
+        <span className="absolute top-0 left-0 w-0 h-0 rounded-full opacity-0 bg-white/10 backdrop-blur-md transition-all duration-300 group-hover:top-[-20px] group-hover:left-[-20px] group-hover:w-[100px] group-hover:h-[100px] group-hover:opacity-100" />
+      </span>
+
+      {/* Actual Glassmorphic Content Container inherited from original Card */}
+      <div
+        data-slot="card"
+        className={cn(
+          'relative z-20 left-0 bg-card/60 backdrop-blur-md text-card-foreground flex flex-col gap-6 rounded-xl border border-border/50 py-6 shadow-sm transition-all duration-500 group-hover:-translate-x-2 group-hover:-translate-y-2 group-hover:shadow-[0_8px_32px_rgba(0,0,0,0.2)] group-hover:border-transparent h-full',
+          className,
+        )}
+      >
+        {children}
+      </div>
+    </div>
   )
 }
 
@@ -42,7 +59,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="card-description"
-      className={cn('text-muted-foreground text-sm', className)}
+      className={cn('text-muted-foreground group-hover:text-white/90 transition-colors duration-300 text-sm', className)}
       {...props}
     />
   )
