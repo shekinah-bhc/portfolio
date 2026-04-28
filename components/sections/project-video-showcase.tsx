@@ -250,14 +250,14 @@ function ProjectSelector({
   onChange: (i: number) => void
 }) {
   return (
-    <div className="flex flex-row lg:flex-col gap-3">
+    <div className="flex flex-row lg:flex-col gap-3 overflow-x-auto scrollbar-hide pb-2 lg:pb-0 -mx-6 px-6 lg:mx-0 lg:px-0">
       {projects.map((p, i) => {
         const active = i === activeIndex
         return (
           <button
             key={p.id}
             onClick={() => onChange(i)}
-            className={`group relative flex items-center gap-3 px-4 py-3 rounded-xl border text-left transition-all duration-300 ${
+            className={`group relative flex items-center gap-3 px-4 py-3 rounded-xl border text-left transition-all duration-300 shrink-0 lg:shrink ${
               active
                 ? "bg-foreground/5 border-foreground/20"
                 : "border-transparent hover:border-border hover:bg-secondary/20"
@@ -368,15 +368,15 @@ export function ProjectVideoShowcase({
         </motion.div>
 
         <div className="mx-auto max-w-[1400px] px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-16 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-16 items-start">
 
-            {/* Left: Project Selector (sidebar on desktop) */}
+            {/* Selector: Top on mobile, Left on desktop */}
             <motion.div
               initial={{ opacity: 0, x: -24 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="lg:col-span-2 lg:pt-4 order-3 lg:order-1"
+              className="lg:col-span-2 lg:pt-4 order-1 lg:order-1"
             >
               <ProjectSelector
                 projects={projects}
@@ -391,7 +391,7 @@ export function ProjectVideoShowcase({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="lg:col-span-7 order-1 lg:order-2"
+              className="lg:col-span-7 order-2 lg:order-2"
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -415,8 +415,8 @@ export function ProjectVideoShowcase({
                 </motion.div>
               </AnimatePresence>
 
-              {/* Pagination dots */}
-              <div className="flex items-center justify-center gap-2 mt-6">
+              {/* Pagination dots - Hidden on mobile as we have the selector at top */}
+              <div className="hidden lg:flex items-center justify-center gap-2 mt-6">
                 {projects.map((_, i) => (
                   <button
                     key={i}
@@ -437,7 +437,7 @@ export function ProjectVideoShowcase({
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="lg:col-span-3 order-2 lg:order-3 lg:sticky lg:top-32"
+              className="lg:col-span-3 order-3 lg:order-3 lg:sticky lg:top-32"
             >
               <MetaPanel project={active} index={activeIndex} />
             </motion.div>

@@ -72,7 +72,7 @@ export function Experience() {
 
         <div ref={containerRef} className="relative">
           {/* Animated Vertical Line */}
-          <div className="absolute left-0 md:left-1/2 top-0 bottom-0 w-[2px] bg-zinc-800 md:-translate-x-1/2">
+          <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[2px] bg-zinc-800 md:-translate-x-1/2">
             <motion.div 
               style={{ scaleY, originY: 0 }}
               className="absolute inset-0 bg-linear-to-b from-primary via-indigo-500 to-transparent shadow-[0_0_15px_rgba(99,102,241,0.5)]" 
@@ -90,7 +90,7 @@ export function Experience() {
                 className="relative flex flex-col md:flex-row md:justify-between items-start md:items-center group"
               >
                 {/* Timeline Node Icon */}
-                <div className="absolute left-0 md:left-1/2 w-10 h-10 translate-x-[-19px] md:-translate-x-1/2 z-20 flex items-center justify-center">
+                <div className="absolute left-4 md:left-1/2 w-10 h-10 translate-x-[-19px] md:-translate-x-1/2 z-20 flex items-center justify-center">
                   <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center group-hover:border-primary transition-colors duration-500 shadow-xl">
                     {exp.type === "Work" ? (
                       <Briefcase size={18} className="text-zinc-400 group-hover:text-primary transition-colors" />
@@ -102,7 +102,7 @@ export function Experience() {
 
                 {/* Content Card */}
                 <div className={cn(
-                  "w-full md:w-[45%] mt-16 md:mt-0 ml-8 md:ml-0",
+                  "w-full md:w-[45%] mt-16 md:mt-0 ml-12 md:ml-0",
                   index % 2 === 0 ? "md:text-right md:pr-12" : "md:ml-auto md:pl-12"
                 )}>
                   {/* Fake Terminal Header for the card */}

@@ -24,20 +24,20 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-background pt-32 pb-20 px-6">
+    <main className="min-h-screen bg-background pt-24 sm:pt-32 pb-20 px-4 sm:px-6">
       <div className="mx-auto max-w-5xl">
         {/* Fixed Navigation */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="fixed top-8 left-8 z-50"
+          className="fixed top-4 left-4 sm:top-8 sm:left-8 z-50"
         >
           <Link
             href="/#projects"
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-background/40 backdrop-blur-xl border border-border/50 text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all group shadow-2xl"
+            className="flex h-10 w-10 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-background/60 backdrop-blur-xl border border-border/50 text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all group shadow-2xl"
             title="Back to projects"
           >
-            <ArrowLeft className="h-6 w-6 transition-transform group-hover:-translate-x-1" />
+            <ArrowLeft className="h-5 w-5 sm:h-6 sm:h-6 transition-transform group-hover:-translate-x-1" />
           </Link>
         </motion.div>
 
@@ -77,7 +77,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                className="text-5xl font-bold tracking-tight sm:text-7xl lg:text-8xl"
+                className="text-4xl font-bold tracking-tight sm:text-7xl lg:text-8xl"
               >
                 {project.title}
               </motion.h1>
@@ -87,7 +87,7 @@ export default function ProjectPage({ params }: ProjectPageProps) {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-2xl text-muted-foreground leading-relaxed max-w-3xl italic"
+              className="text-xl sm:text-2xl text-muted-foreground leading-relaxed max-w-3xl italic"
             >
               "{project.description}"
             </motion.p>
@@ -216,8 +216,8 @@ export default function ProjectPage({ params }: ProjectPageProps) {
 
         {/* CTA */}
         <section className="mt-32 pt-20 border-t border-border">
-          <div className="bg-secondary/30 rounded-[3rem] p-12 text-center space-y-8">
-            <h2 className="text-3xl font-bold sm:text-5xl">Like what you see?</h2>
+          <div className="bg-secondary/30 rounded-[2rem] sm:rounded-[3rem] p-8 sm:p-12 text-center space-y-8">
+            <h2 className="text-2xl font-bold sm:text-5xl">Like what you see?</h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               I'm currently available for full-stack engineering roles and high-impact freelance projects. Let's build something together.
             </p>

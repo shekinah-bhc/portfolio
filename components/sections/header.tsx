@@ -40,7 +40,7 @@ export function Header() {
       animate={{ y: isVisible ? 0 : -100 }}
       transition={{ duration: 0.3 }}
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 py-4",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-4 sm:px-6 py-4",
         isScrolled ? "bg-background/80 backdrop-blur-md border-b border-border/50 py-3" : "bg-transparent"
       )}
     >
@@ -50,7 +50,7 @@ export function Header() {
           <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-black text-xl group-hover:rotate-12 transition-transform shadow-lg shadow-primary/20">
             S
           </div>
-          <span className="hidden sm:block font-bold text-xl tracking-tight">Shekinah</span>
+          <span className="hidden min-[400px]:block font-bold text-xl tracking-tight">Shekinah</span>
         </Link>
 
         {/* Desktop Nav */}
