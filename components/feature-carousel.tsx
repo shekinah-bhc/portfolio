@@ -86,7 +86,7 @@ export function FeatureCarousel({ features }: { features: CarouselFeature[] }) {
         <div className="w-full lg:w-[40%] min-h-[200px] md:min-h-[250px] lg:h-full relative z-30 flex flex-col items-start justify-center overflow-hidden px-8 md:px-16 lg:pl-16 bg-card border-b lg:border-b-0 lg:border-r border-border/40">
           
           {/* Subtle Ambient Tech Glow */}
-          <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full h-1/2 bg-accenture-gradient opacity-15 blur-[100px] pointer-events-none mix-blend-screen" />
+          <div className="absolute top-1/2 left-0 -translate-y-1/2 w-full h-1/2 opacity-15 blur-[100px] pointer-events-none mix-blend-screen" />
           
           {/* Gradients for "fade" effect - Responsive */}
           <div className={cn(

@@ -54,23 +54,24 @@ export function Blog() {
           </motion.h2>
           <motion.div 
             variants={itemVariants}
-            className="h-1 w-20 bg-primary rounded-full"
+            className="h-1 w-20 bg-linear-to-r from-primary to-blue-400 rounded-full"
           />
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           {posts.map((post, index) => (
-            <motion.div key={post.slug} variants={itemVariants}>
-              <Card className="h-full bg-background border-border hover:border-primary/20 transition-all group overflow-hidden">
+            <motion.div key={post.slug} variants={itemVariants} className="relative group">
+              <div className="absolute -inset-0.5 bg-linear-to-r from-primary via-blue-500 to-purple-600 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-tilt" />
+              <Card className="relative h-full bg-background/80 backdrop-blur-xl border-white/10 hover:border-white/20 transition-all overflow-hidden">
                 <CardHeader className="space-y-4">
                   <div className="flex flex-wrap gap-2">
                     {post.tags.map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-[10px] uppercase font-mono tracking-wider">
+                      <Badge key={tag} variant="outline" className="text-[10px] uppercase font-mono tracking-wider bg-background/50 backdrop-blur-md">
                         {tag}
                       </Badge>
                     ))}
                   </div>
-                  <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors">
+                  <CardTitle className="text-xl font-bold group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-linear-to-r group-hover:from-primary group-hover:to-blue-400 transition-all">
                     {post.title}
                   </CardTitle>
                 </CardHeader>
