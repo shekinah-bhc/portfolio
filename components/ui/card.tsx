@@ -9,10 +9,6 @@ function Card({ className, children, ...props }: React.ComponentProps<'div'>) {
       className="group relative w-full h-full transition-all duration-500 rounded-xl"
       {...props}
     >
-      {/* Skewed gradient panels from gradient-card-showcase */}
-      <span className="absolute top-0 right-[20px] w-1/2 h-full rounded-xl transform skew-x-15deg transition-all duration-500 group-hover:skew-x-0 group-hover:right-[10px] group-hover:w-[calc(100%-20px)] bg-accenture-gradient" />
-      <span className="absolute top-0 right-[20px] w-1/2 h-full rounded-xl transform skew-x-15deg blur-[30px] transition-all duration-500 group-hover:skew-x-0 group-hover:right-[10px] group-hover:w-[calc(100%-20px)] bg-accenture-gradient opacity-60 group-hover:opacity-100" />
-      
       {/* Animated blurs */}
       <span className="pointer-events-none absolute inset-0 z-10 overflow-hidden rounded-xl">
         <span className="absolute top-0 left-0 w-0 h-0 rounded-full opacity-0 bg-white/10 backdrop-blur-md transition-all duration-300 group-hover:top-[-20px] group-hover:left-[-20px] group-hover:w-[100px] group-hover:h-[100px] group-hover:opacity-100" />
