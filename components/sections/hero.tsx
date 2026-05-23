@@ -1,204 +1,227 @@
+// components/hero.tsx
 "use client"
 
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
-import { useRef, useState, useEffect } from "react"
+import { useEffect, useState, useRef } from "react"
+import { motion } from "framer-motion"
 import { siteConfig } from "@/lib/constants"
-import { Button } from "@/components/ui/button"
-import { CharacterReveal } from "./text-reveal"
-import { MagneticButton } from "./magnetic-button"
-import { ArrowDown, Mail } from "lucide-react"
 
-const roles = ["Full Stack Developer", "React Developer", "Next.js Developer", "UI Engineer"]
-
-const logos = [
-  {
-    name: "Vercel",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715881430/vercel_wordmark_dark_mhv8u8.svg",
-  },
-  {
-    name: "Nextjs",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715881475/nextjs_logo_dark_gfkf8m.svg",
-  },
-  {
-    name: "Prime",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/t2awrrfzdvmg1chnzyfr.svg",
-  },
-  {
-    name: "Trustpilot",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tkfspxqmjflfllbuqxsi.svg",
-  },
-  {
-    name: "Webflow",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276560/logos/nymiivu48d5lywhf9rpf.svg",
-  },
-  {
-    name: "Airbnb",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/pmblusboe7vkw8vxdknx.svg",
-  },
-  {
-    name: "Tina",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276560/logos/afqhiygywyphuou6xtxc.svg",
-  },
-  {
-    name: "Stackoverflow",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/ts1j4mkooxqmscgptafa.svg",
-  },
-  {
-    name: "mistral",
-    url: "https://res.cloudinary.com/dfhp33ufc/image/upload/v1715276558/logos/tyos2ayezryjskox3wzs.svg",
-  },
+const ROLES = [
+  "scalable web apps.",
+  "reactive UIs.",
+  "full-stack systems.",
+  "animated experiences.",
+  "API-driven products.",
 ]
 
-const AnimatedLogoCloud = () => {
-  return (
-    <div className="w-full py-12">
-      <div className="mx-auto w-full px-4 md:px-8">
-        <div
-          className="group relative mt-6 flex gap-6 overflow-hidden p-2"
-          style={{
-            maskImage: "linear-gradient(to left, transparent 0%, black 20%, black 80%, transparent 95%)",
-          }}
-        >
-          {Array(5)
-            .fill(null)
-            .map((_, index) => (
-              <div key={index} className="flex shrink-0 animate-x-slider flex-row justify-around gap-6">
-                {logos.map((logo, key) => (
-                  <img
-                    key={key}
-                    src={logo.url}
-                    className="h-10 w-28 px-2 flex-none brightness-0 dark:invert"
-                    alt={logo.name}
-                  />
-                ))}
-              </div>
-            ))}
-        </div>
-      </div>
-    </div>
-  )
-}
+const SKILLS = [
+  "React", "Next.js", "TypeScript", "Node.js",
+  "MongoDB", "AWS S3", "Redux Toolkit", "Tailwind",
+  "GSAP", "Framer Motion", "Three.js",
+]
 
-export function Hero() {
-  const ref = useRef(null)
-  const [roleIndex, setRoleIndex] = useState(0)
+const STATS: { num: string; suffix: string; label: string }[] = [
+  { num: "3", suffix: "+", label: "years exp" },
+  { num: "15", suffix: "+", label: "projects shipped" },
+  { num: "∞", suffix: "", label: "coffee consumed" },
+]
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  })
-
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 150])
-  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, 300])
-  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9])
+function useTypewriter(words: string[]): string {
+  const [text, setText] = useState("")
+  const [wordIndex, setWordIndex] = useState(0)
+  const [deleting, setDeleting] = useState(false)
+  const [charIndex, setCharIndex] = useState(0)
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % roles.length)
-    }, 3000)
-    return () => clearInterval(timer)
-  }, [])
+    const word = words[wordIndex]
+    const speed = deleting ? 38 : 62
+
+    if (!deleting && charIndex >= word.length) {
+      const timer = setTimeout(() => setDeleting(true), 1600)
+      return () => clearTimeout(timer)
+    }
+
+    if (deleting && charIndex <= 0) {
+      setDeleting(false)
+      setWordIndex((i) => (i + 1) % words.length)
+      setCharIndex(0)
+      setText("")
+      return
+    }
+
+    const timer = setTimeout(() => {
+      const next = charIndex + (deleting ? -1 : 1)
+      setCharIndex(next)
+      setText(word.slice(0, next))
+    }, speed)
+
+    return () => clearTimeout(timer)
+  }, [wordIndex, deleting, charIndex, words])
+
+  return text
+}
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 14 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+})
+
+export function Hero() {
+  const role = useTypewriter(ROLES)
 
   return (
-    <section
-      ref={ref}
-      className="relative min-h-screen overflow-hidden bg-[linear-gradient(to_bottom,#fff,#b49de0_40%,#A46EDB_88%)] dark:bg-[linear-gradient(to_bottom,#000,#200D42_40%,#4F21A1_74%,#A46EDB_88%_50%)]"
-    >
-      <motion.div 
-        style={{ y: backgroundY }}
-        className="absolute left-1/2 top-[calc(100%-90px)] lg:top-[calc(100%-150px)] h-[500px] w-[700px] md:h-[500px] md:w-[1100px] lg:h-[750px] lg:w-full -translate-x-1/2 rounded-[100%] border-[#B48CDE] bg-black bg-[radial-gradient(closest-side,#000_82%,#9560EB)]"
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-zinc-950 text-zinc-50">
+
+      {/* Grid background */}
+      <div
+        className="absolute inset-0 opacity-35 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(#27272a 1px, transparent 1px), linear-gradient(90deg, #27272a 1px, transparent 1px)",
+          backgroundSize: "44px 44px",
+          maskImage:
+            "radial-gradient(ellipse 80% 70% at 50% 50%, black 10%, transparent 100%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 80% 70% at 50% 50%, black 10%, transparent 100%)",
+        }}
       />
-      
-      {/* Grid Borders */}
-      <div className="absolute left-0 top-0 z-0 grid h-full w-full grid-cols-[clamp(28px,10vw,120px)_auto_clamp(28px,10vw,120px)] border-b border-border dark:border-white/10">
-        <div className="col-span-1 flex h-full items-center justify-center" />
-        <div className="col-span-1 flex h-full items-center justify-center border-x border-border dark:border-white/10" />
-        <div className="col-span-1 flex h-full items-center justify-center" />
+
+      {/* Ambient glows */}
+      <motion.div
+        className="absolute top-1/4 -right-20 w-[420px] h-[420px] rounded-full pointer-events-none blur-[80px]"
+        style={{ background: "radial-gradient(circle, rgba(139,92,246,0.13) 0%, transparent 70%)" }}
+        animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.07, 1] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-1/4 -left-16 w-[340px] h-[340px] rounded-full pointer-events-none blur-[80px]"
+        style={{ background: "radial-gradient(circle, rgba(99,102,241,0.08) 0%, transparent 70%)" }}
+        animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.07, 1] }}
+        transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+      />
+
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 py-32 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-8 lg:gap-24 items-center">
+        <div className="flex flex-col items-start">
+
+          {/* Availability badge */}
+          <motion.div {...fadeUp(0)} className="mb-6">
+            <span className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/60 backdrop-blur-sm text-xs font-mono text-zinc-400">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+              </span>
+              Available for freelance &amp; contracts
+            </span>
+          </motion.div>
+
+          {/* Headline */}
+          <motion.h1
+            {...fadeUp(0.1)}
+            className="text-[clamp(32px,4.5vw,58px)] font-bold leading-[1.08] tracking-[-0.03em] mb-4 text-zinc-100"
+          >
+            Hi, I&apos;m{" "}
+            <span className="bg-gradient-to-br from-violet-300 via-indigo-400 to-violet-400 bg-clip-text text-transparent">
+              {siteConfig.name}
+            </span>
+          </motion.h1>
+
+          {/* Accent divider */}
+          <motion.div
+            {...fadeUp(0.15)}
+            className="w-7 h-[2px] rounded-full mb-5"
+            style={{ background: "linear-gradient(90deg, #a78bfa, transparent)" }}
+          />
+
+          {/* Typewriter */}
+          <motion.div
+            {...fadeUp(0.2)}
+            className="flex items-center gap-2 h-8 mb-5"
+          >
+            <span className="text-sm sm:text-base text-zinc-500 font-light">I build</span>
+            <span className="text-sm sm:text-base font-medium text-violet-400 font-mono tracking-tight">
+              {role}
+            </span>
+            <span className="inline-block w-[2px] h-[18px] bg-violet-400 animate-pulse" />
+          </motion.div>
+
+          {/* Bio */}
+          <motion.p
+            {...fadeUp(0.3)}
+            className="max-w-[480px] text-[14px] leading-[1.75] text-zinc-500 font-normal mb-8 text-pretty"
+          >
+            {siteConfig.description}
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div {...fadeUp(0.4)} className="flex flex-wrap gap-3 mb-7">
+            <a
+              href="#projects"
+              className="px-6 py-2.5 rounded-lg bg-zinc-100 text-zinc-950 text-[13px] font-medium transition-all hover:bg-white hover:-translate-y-px active:translate-y-0 shadow-lg shadow-violet-500/10 hover:shadow-violet-500/20"
+            >
+              View projects
+            </a>
+            <a
+              href="#contact"
+              className="px-6 py-2.5 rounded-lg border border-zinc-800 bg-zinc-900/50 backdrop-blur-sm text-zinc-400 text-[13px] font-medium transition-all hover:border-zinc-700 hover:bg-zinc-900/80 hover:text-zinc-200 hover:-translate-y-px active:translate-y-0"
+            >
+              Get in touch
+            </a>
+          </motion.div>
+
+          {/* Skill pills */}
+          <motion.div {...fadeUp(0.5)} className="flex flex-wrap gap-1.5 max-w-[500px]">
+            {SKILLS.map((skill) => (
+              <span
+                key={skill}
+                className="px-2.5 py-1 rounded-md border border-zinc-900 bg-zinc-900/40 text-[10.5px] font-mono text-zinc-500 transition-all duration-200 hover:border-zinc-700 hover:bg-zinc-900 hover:text-zinc-300 cursor-default select-none"
+              >
+                {skill}
+              </span>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="grid grid-cols-3 lg:flex lg:flex-col gap-3 w-full lg:w-auto"
+        >
+          {STATS.map(({ num, suffix, label }) => (
+            <div
+              key={label}
+              className="border border-zinc-900 bg-zinc-900/30 backdrop-blur-sm rounded-xl p-4 sm:p-5 lg:min-w-[148px] flex flex-col justify-center items-center lg:items-start transition-colors hover:border-zinc-800 cursor-default"
+            >
+              <div className="text-2xl sm:text-[26px] font-bold text-zinc-100 tracking-[-0.04em] leading-none flex items-baseline gap-0.5">
+                <span>{num}</span>
+                {suffix && (
+                  <span className="text-[15px] text-violet-400 ml-0.5">{suffix}</span>
+                )}
+              </div>
+              <div className="text-[9.5px] font-mono text-zinc-500 mt-1.5 uppercase tracking-[0.18em] text-center lg:text-left">
+                {label}
+              </div>
+            </div>
+          ))}
+        </motion.div>
       </div>
 
-      <motion.figure 
-        style={{ y: backgroundY, opacity }}
-        className="bg-primary/20 pointer-events-none absolute bottom-[-70%] left-1/2 z-0 block aspect-square w-[520px] -translate-x-1/2 rounded-full blur-[200px]" 
-      />
-      
-      <motion.div 
-        style={{ y: contentY, opacity, scale }}
-        className="relative z-10 flex flex-col divide-y divide-border dark:divide-white/10 pt-[100px]"
-      >
-        <div className="flex flex-col items-center justify-end pb-8">
-          <div className="flex items-center gap-2 px-4 py-2 border border-border dark:border-white/10 bg-background/50 backdrop-blur-sm rounded-full">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            <p className="text-sm font-medium text-muted-foreground">Available for Freelance</p>
-          </div>
-        </div>
-
-        <div>
-          <div className="mx-auto flex flex-col items-center justify-center gap-6 px-6 py-12 sm:px-10 lg:px-24 text-center">
-            <h1 className="text-pretty text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground leading-none">
-              <CharacterReveal delay={0.8}>{siteConfig.name}</CharacterReveal>
-            </h1>
-            
-            <div className="h-12 sm:h-16 flex items-center justify-center">
-              <AnimatePresence mode="wait">
-                <motion.h2
-                  key={roleIndex}
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -20, opacity: 0 }}
-                  transition={{ duration: 0.5, ease: "easeInOut" }}
-                  className="text-2xl font-semibold sm:text-4xl lg:text-5xl text-muted-foreground"
-                >
-                  {roles[roleIndex]}
-                </motion.h2>
-              </AnimatePresence>
-            </div>
-
-            <p className="max-w-2xl text-lg sm:text-xl text-muted-foreground/80 text-balance">
-              {siteConfig.description}
-            </p>
-
-            <div className="flex flex-wrap items-center justify-center gap-4 pt-6">
-              <MagneticButton>
-                <Button asChild size="lg" className="rounded-full px-8 h-14 text-base shadow-lg bg-primary hover:bg-primary/90 text-primary-foreground">
-                  <a href="#projects">View My Work</a>
-                </Button>
-              </MagneticButton>
-              
-              <MagneticButton>
-                <Button asChild variant="outline" size="lg" className="rounded-full px-8 h-14 text-base bg-background/50 backdrop-blur-md border-border hover:bg-accent/50 group">
-                  <a href="#contact" className="flex items-center gap-2">
-                    Get In Touch
-                    <Mail className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </Button>
-              </MagneticButton>
-            </div>
-          </div>
-        </div>
-
-        <div className="mx-auto w-full max-w-7xl overflow-hidden">
-          <AnimatedLogoCloud />
-        </div>
-      </motion.div>
-
       {/* Scroll indicator */}
-      <motion.div 
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        style={{ opacity }}
-        transition={{ delay: 2, duration: 1 }}
+        transition={{ delay: 1.2, duration: 0.5 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 pointer-events-none"
       >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
-          <ArrowDown className="w-6 h-6 text-muted-foreground opacity-50" />
-        </motion.div>
+        <span className="text-[9px] font-mono text-zinc-700 tracking-[0.25em] uppercase">Scroll</span>
+        <div className="w-px h-10 bg-gradient-to-b from-zinc-700 via-zinc-800 to-transparent relative overflow-hidden">
+          <motion.div
+            className="absolute top-0 left-0 w-full h-2/5 bg-violet-400"
+            animate={{ y: ["-100%", "260%"] }}
+            transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
       </motion.div>
     </section>
   )
