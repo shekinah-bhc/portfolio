@@ -37,7 +37,7 @@ export const projects: Project[] = [
     status: "Live",
     year: "2024",
     role: "Full-Stack Engineer",
-    liveUrl: "https://reborninteractive.in",
+    liveUrl: "https://reborninteractive.com",
     stack: ["Next.js 15", "TypeScript", "GSAP", "ScrollTrigger", "Three.js", "i18n", "feature-sliced architecture"],
     description: "Production website built from scratch for a creative agency. Multi-language, GPU-accelerated animations, custom Three.js visuals.",
     whatIDid: {
