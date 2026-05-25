@@ -214,18 +214,6 @@ export default function ProjectPage({ params }: ProjectPageProps) {
           </div>
         </div>
 
-        {/* CTA */}
-        <section className="mt-32 pt-20 border-t border-border">
-          <div className="bg-secondary/30 rounded-[2rem] sm:rounded-[3rem] p-8 sm:p-12 text-center space-y-8">
-            <h2 className="text-2xl font-bold sm:text-5xl">Like what you see?</h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              I'm currently available for full-stack engineering roles and high-impact freelance projects. Let's build something together.
-            </p>
-            <Button asChild size="lg" className="rounded-full px-12 py-8 text-xl font-bold shadow-xl shadow-primary/20">
-              <Link href="/#contact">Get in Touch</Link>
-            </Button>
-          </div>
-        </section>
       </div>
     </main>
   )
