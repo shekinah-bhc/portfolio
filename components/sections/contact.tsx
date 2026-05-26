@@ -9,7 +9,6 @@ import { siteConfig } from "@/lib/constants"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
 import { Github, Linkedin, Mail, Send, Loader2 } from "lucide-react"
@@ -17,12 +16,7 @@ import { Github, Linkedin, Mail, Send, Loader2 } from "lucide-react"
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  projectType: z.enum(["Website", "Web App", "Other"], {
-    required_error: "Please select a project type",
-  }),
-  budget: z.enum(["<₹50K", "₹50K–₹1L", "₹1L+", "Let's discuss"], {
-    required_error: "Please select a budget range",
-  }),
+
   message: z.string().min(10, "Message must be at least 10 characters"),
 })
 
@@ -86,7 +80,7 @@ export function Contact() {
         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-start">
           
           {/* Content Side */}
-          <div className="space-y-6 sm:space-y-8 lg:space-y-10 order-1 lg:order-none w-full">
+          <div className="space-y-6 sm:space-y-8 lg:space-y-10 order-1 lg:order-0 w-full">
             <div className="space-y-4 sm:space-y-6">
               
               <motion.h2 variants={itemVariants} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
@@ -103,7 +97,7 @@ export function Contact() {
                 href={`mailto:${siteConfig.email}`}
                 className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-secondary/20 border border-border/50 hover:border-primary/50 transition-all touch-manipulation w-full"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform flex-shrink-0">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform shrink-0">
                   <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -133,7 +127,7 @@ export function Contact() {
           {/* Form Side - Fixed Responsive Container */}
           <motion.div 
             variants={itemVariants} 
-            className="relative group order-2 lg:order-none w-full"
+            className="relative group order-2 lg:order-0 w-full"
           >
             {/* Animated Border Gradient Glow - Now properly constrained */}
             <div className="absolute -inset-0.5 sm:-inset-1 bg-linear-to-r from-primary via-blue-500 to-purple-600 rounded-2xl sm:rounded-3xl lg:rounded-4xl blur-md sm:blur-xl opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
@@ -179,53 +173,7 @@ export function Contact() {
                     />
                   </div>
 
-                  <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 sm:gap-6">
-                    <FormField
-                      control={form.control}
-                      name="projectType"
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel className="text-foreground/70 text-sm sm:text-base">Project Type</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="bg-secondary/30 border-none h-10 sm:h-12 rounded-lg sm:rounded-xl focus:ring-primary/50 text-sm sm:text-base w-full">
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="rounded-lg sm:rounded-xl">
-                              <SelectItem value="Website">Website</SelectItem>
-                              <SelectItem value="Web App">Web App</SelectItem>
-                              <SelectItem value="Other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage className="text-xs sm:text-sm" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="budget"
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel className="text-foreground/70 text-sm sm:text-base">Budget</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="bg-secondary/30 border-none h-10 sm:h-12 rounded-lg sm:rounded-xl focus:ring-primary/50 text-sm sm:text-base w-full">
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent className="rounded-lg sm:rounded-xl">
-                              <SelectItem value="<₹50K">&lt;₹50K</SelectItem>
-                              <SelectItem value="₹50K–₹1L">₹50K–₹1L</SelectItem>
-                              <SelectItem value="₹1L+">₹1L+</SelectItem>
-                              <SelectItem value="Let's discuss">Let's discuss</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage className="text-xs sm:text-sm" />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+               
 
                   <FormField
                     control={form.control}
