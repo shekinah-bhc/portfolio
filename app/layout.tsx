@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { siteConfig } from '@/lib/constants'
 import { Providers } from '@/components/providers'
+import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 import { SpeedInsights } from "@vercel/speed-insights/next"
 const sans = Plus_Jakarta_Sans({ 
@@ -82,6 +83,7 @@ export default function RootLayout({
       <body className={`${sans.variable} ${geistMono.variable} font-sans antialiased text-foreground`}>
         <Providers>
           {children}
+          <Toaster />
         </Providers>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <SpeedInsights />

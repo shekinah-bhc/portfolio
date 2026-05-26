@@ -129,68 +129,54 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   )
 }
 
-import { FeatureCarousel, CarouselFeature } from "@/components/feature-carousel"
-import {
-  GlobalSearchIcon,
-  AiCloudIcon,
-  DashboardSquare01Icon,
-  CommandFreeIcons,
-} from "@hugeicons/core-free-icons"
-
-const PROJECT_IMAGES = [
-  "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=1200", 
-  "https://images.unsplash.com/photo-1551288049-bbda38a10ad5?q=80&w=1200",
-  "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200",
-  "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1200"
-]
-
-const PROJECT_ICONS = [
-  AiCloudIcon,
-  DashboardSquare01Icon,
-  GlobalSearchIcon,
-  CommandFreeIcons
-]
+import { ClippedVideoTab } from "@/components/clipped-video-tab"
 
 export function Projects() {
   const sectionRef = useRef(null)
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" })
   const projects = getAllProjects()
 
-  const projectFeatures: CarouselFeature[] = projects.map((project, idx) => ({
-    id: project.id,
-    label: project.title,
-    description: project.description,
-    image: PROJECT_IMAGES[idx % PROJECT_IMAGES.length],
-    icon: PROJECT_ICONS[idx % PROJECT_ICONS.length],
-    href: `/projects/${project.slug}`
-  }))
-
   return (
-    <section id="projects" className="px-6 py-24 relative overflow-hidden">
+    <section id="projects" className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-32 md:py-0 selection:bg-[#b8ff35] selection:text-[#0a0a0a]">
+      {/* Noise Texture */}
+      <div 
+        className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none mix-blend-screen"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
       <motion.div
         ref={sectionRef}
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="mx-auto max-w-7xl"
+        className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-12"
       >
-        <div className=" space-y-4">
-          <motion.h2 
-            variants={itemVariants}
-            className="text-3xl font-bold text-foreground sm:text-4xl"
-          >
-            <TextReveal>Featured Projects</TextReveal>
-          </motion.h2>
-          <motion.div 
-            variants={itemVariants}
-            className="h-1 w-20 bg-primary rounded-full transition-all duration-300"
-          />
+        {/* Section Header */}
+        <div className="flex items-center gap-6 border-t border-[#f0ece3]/20 pt-6 mb-12">
+          <span className="text-[#b8ff35] font-mono text-sm tracking-widest">[ 02 ]</span>
+          <span className="text-sm tracking-[0.3em] uppercase font-light text-[#f0ece3]/60">Selected Works</span>
         </div>
 
-        {/* Brand new Carousel Layout */}
-        <FeatureCarousel features={projectFeatures} />
+        <div className="text-left mb-16 max-w-3xl">
+          <motion.h2 
+            variants={itemVariants}
+            className="text-[clamp(2.5rem,5vw,5rem)] font-black leading-[0.95] tracking-tight uppercase mb-6"
+          >
+            Featured <br />
+            <span className="text-[#b8ff35]">Projects.</span>
+          </motion.h2>
+          <motion.p 
+            variants={itemVariants}
+            className="text-lg text-[#f0ece3]/60 font-light leading-relaxed"
+          >
+            A curated selection of my latest work. From experimental interactive experiences to production-ready scalable applications.
+          </motion.p>
+        </div>
 
-
+        {/* Brutalist Clipped Video Layout */}
+        <ClippedVideoTab projects={projects} />
       </motion.div>
     </section>
   )

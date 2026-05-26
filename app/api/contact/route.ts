@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
 import { z } from 'zod'
-import { siteConfig } from '@/lib/constants'
+import clientPromise from '@/lib/mongodb'
 
-const resend = new Resend(process.env.RESEND_API_KEY || "re-88998899889988998899889988998899") 
+
 
 // Simple in-memory rate limiting
 const rateLimitMap = new Map<string, { count: number; lastRequest: number }>()
@@ -13,8 +12,6 @@ const RATE_LIMIT_WINDOW = 3600000 // 1 hour in ms
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(50),
   email: z.string().email("Invalid email address"),
-  projectType: z.enum(["Website", "Web App", "Other"]),
-  budget: z.enum(["<₹50K", "₹50K–₹1L", "₹1L+", "Let's discuss"]),
   message: z.string().min(10, "Message must be at least 10 characters").max(500),
 })
 
@@ -45,29 +42,27 @@ export async function POST(req: NextRequest) {
     const body = await req.json()
     const validatedData = contactSchema.parse(body)
 
-    const { name, email, projectType, budget, message } = validatedData
+    const { name, email, message } = validatedData
 
-    const { data, error } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
-      to: siteConfig.email || 'florashek24official@gmail.com',
-      subject: `New Project Inquiry: ${projectType} from ${name}`,
-      replyTo: email,
-      text: `Name: ${name}\nEmail: ${email}\nProject Type: ${projectType}\nBudget: ${budget}\n\nMessage:\n${message}`,
+   
+
+
+
+    const client = await clientPromise
+    const db = client.db('portfolio')
+    await db.collection('messages').insertOne({
+      name,
+      email,
+     
+      message,
+      ip,
+      createdAt: new Date(),
     })
-
-
-    if (error) {
-      console.error('Resend Error:', error)
-      return NextResponse.json(
-        { success: false, message: 'Failed to send email. Please try again later.' },
-        { status: 500 }
-      )
-    }
 
     return NextResponse.json({
       success: true,
       message: 'Message sent successfully!',
-      data,
+    
     })
   } catch (error) {
     if (error instanceof z.ZodError) {
