@@ -1,43 +1,38 @@
 "use client"
 
-import { useState } from "react"
-import { motion } from "framer-motion"
+import { useState, useEffect, useRef } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
+import gsap from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { SplitText } from "gsap/SplitText"
 import { siteConfig } from "@/lib/constants"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
-import { Github, Linkedin, Mail, Send, Loader2 } from "lucide-react"
+import { Github, Linkedin, ArrowUpRight, Loader2 } from "lucide-react"
+
+gsap.registerPlugin(ScrollTrigger, SplitText)
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-
   message: z.string().min(10, "Message must be at least 10 characters"),
 })
 
 type ContactFormValues = z.infer<typeof contactSchema>
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-  },
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } } as const,
-}
+const socials = [
+  { label: "GitHub", icon: Github, href: siteConfig.links.github },
+  { label: "LinkedIn", icon: Linkedin, href: siteConfig.links.linkedin },
+]
 
 export function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false)
-  
+  const sectionRef = useRef<HTMLElement>(null)
+  const headlineRef = useRef<HTMLHeadingElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", email: "", message: "" },
@@ -57,162 +52,209 @@ export function Contact() {
       } else {
         toast.error("Failed to send message.")
       }
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong.")
     } finally {
       setIsSubmitting(false)
     }
   }
 
-  return (
-    <section id="contact" className="relative px-4 sm:px-6 py-16 sm:py-24 lg:py-32 overflow-hidden">
-      {/* Background Gradient Blobs */}
-      <div className="absolute top-0 left-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-primary/10 rounded-full blur-[80px] sm:blur-[120px] -z-10" />
-      <div className="absolute bottom-0 right-1/4 w-64 h-64 sm:w-96 sm:h-96 bg-blue-500/10 rounded-full blur-[80px] sm:blur-[120px] -z-10" />
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Headline char reveal
+      if (headlineRef.current) {
+        const split = new SplitText(headlineRef.current, { type: "chars,words" })
+        gsap.fromTo(split.chars,
+          { opacity: 0, y: 50, rotateX: -90 },
+          {
+            opacity: 1, y: 0, rotateX: 0,
+            duration: 0.7, stagger: 0.02, ease: "expo.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 75%",
+            }
+          }
+        )
+      }
 
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="w-full max-w-6xl mx-auto"
-      >
-        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-start">
+      // Content stagger
+      if (contentRef.current) {
+        gsap.fromTo(contentRef.current.children,
+          { opacity: 0, y: 30 },
+          {
+            opacity: 1, y: 0,
+            duration: 0.8, stagger: 0.12, ease: "expo.out",
+            scrollTrigger: {
+              trigger: contentRef.current,
+              start: "top 80%",
+            }
+          }
+        )
+      }
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
+  return (
+    <section
+      ref={sectionRef}
+      id="contact"
+      className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-32 md:py-48 selection:bg-[#b8ff35] selection:text-[#0a0a0a]"
+    >
+      {/* Noise Texture */}
+      <div 
+        className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none mix-blend-screen"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-24 md:gap-32">
+
+        {/* Section Header */}
+        <div className="flex items-center gap-6 border-t border-[#f0ece3]/20 pt-6">
+          <span className="text-[#b8ff35] font-mono text-sm tracking-widest">[ 04 ]</span>
+          <span className="text-sm tracking-[0.3em] uppercase font-light text-[#f0ece3]/60">Get In Touch</span>
+        </div>
+
+        {/* Headline */}
+        <h2
+          ref={headlineRef}
+          className="text-[clamp(3rem,8vw,9rem)] font-black leading-[0.85] tracking-[-0.04em] uppercase max-w-[90%]"
+          style={{ perspective: "1000px", transformStyle: "preserve-3d" }}
+        >
+          LET&apos;S <span className="text-[#b8ff35]">WORK</span><br />
+          TOGETHER.
+        </h2>
+
+        {/* Two Column: Info + Form */}
+        <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-start">
           
-          {/* Content Side */}
-          <div className="space-y-6 sm:space-y-8 lg:space-y-10 order-1 lg:order-0 w-full">
-            <div className="space-y-4 sm:space-y-6">
-              
-              <motion.h2 variants={itemVariants} className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-                Let's build <span className="bg-linear-to-r from-primary to-blue-400 bg-clip-text text-transparent">something great</span> together.
-              </motion.h2>
-              
-              <motion.p variants={itemVariants} className="text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed">
-                Have an idea? I'm here to help you turn it into a digital reality. Reach out via the form or my socials.
-              </motion.p>
+          {/* Left — Info */}
+          <div className="flex flex-col gap-12">
+            <p className="text-lg md:text-xl font-light text-[#f0ece3]/60 leading-relaxed max-w-lg">
+              Have a project in mind, or just want to say hello? Drop me a message. I&apos;m always open to discussing new opportunities, creative ideas, or ways to bring your vision to life.
+            </p>
+
+            {/* Email */}
+            <a 
+              href={`mailto:${siteConfig.email}`}
+              className="group flex items-center gap-4 border-t border-[#f0ece3]/10 pt-6"
+            >
+              <span className="text-xs font-mono text-[#f0ece3]/30 tracking-[0.2em] uppercase">EMAIL</span>
+              <span className="flex-1 text-base md:text-lg font-medium text-[#f0ece3]/80 group-hover:text-[#b8ff35] transition-colors duration-300 truncate">
+                {siteConfig.email}
+              </span>
+              <ArrowUpRight className="w-4 h-4 text-[#f0ece3]/30 group-hover:text-[#b8ff35] transition-colors duration-300" />
+            </a>
+
+            {/* Socials */}
+            <div className="flex gap-4">
+              {socials.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3 px-5 py-3 border border-[#f0ece3]/10 hover:border-[#b8ff35]/50 transition-colors duration-300"
+                >
+                  <s.icon className="w-4 h-4 text-[#f0ece3]/50 group-hover:text-[#b8ff35] transition-colors duration-300" />
+                  <span className="text-xs font-mono uppercase tracking-[0.15em] text-[#f0ece3]/50 group-hover:text-[#f0ece3] transition-colors duration-300">
+                    {s.label}
+                  </span>
+                </a>
+              ))}
             </div>
 
-            <motion.div variants={itemVariants} className="grid gap-3 sm:gap-4">
-              <a 
-                href={`mailto:${siteConfig.email}`}
-                className="group flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-secondary/20 border border-border/50 hover:border-primary/50 transition-all touch-manipulation w-full"
-              >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-linear-to-br from-primary to-blue-600 flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform shrink-0">
-                  <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-muted-foreground">Email Me</p>
-                  <p className="text-sm sm:text-base lg:text-lg font-semibold truncate">{siteConfig.email}</p>
-                </div>
-              </a>
-
-              <div className="flex gap-3 sm:gap-4">
-                {[
-                  { icon: Github, href: siteConfig.links.github },
-                  { icon: Linkedin, href: siteConfig.links.linkedin }
-                ].map((social, i) => (
-                  <a 
-                    key={i}
-                    href={social.href}
-                    target="_blank"
-                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl border border-border flex items-center justify-center hover:bg-foreground hover:text-background transition-all touch-manipulation"
-                  >
-                    <social.icon className="w-5 h-5 sm:w-6 sm:h-6" />
-                  </a>
-                ))}
-              </div>
-            </motion.div>
+            {/* Location */}
+            <div className="flex items-center gap-4 border-t border-[#f0ece3]/10 pt-6">
+              <span className="text-xs font-mono text-[#f0ece3]/30 tracking-[0.2em] uppercase">BASED IN</span>
+              <span className="text-sm font-light text-[#f0ece3]/60">{siteConfig.location}</span>
+            </div>
           </div>
 
-          {/* Form Side - Fixed Responsive Container */}
-          <motion.div 
-            variants={itemVariants} 
-            className="relative group order-2 lg:order-0 w-full"
-          >
-            {/* Animated Border Gradient Glow - Now properly constrained */}
-            <div className="absolute -inset-0.5 sm:-inset-1 bg-linear-to-r from-primary via-blue-500 to-purple-600 rounded-2xl sm:rounded-3xl lg:rounded-4xl blur-md sm:blur-xl opacity-70 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
-            
-            {/* Form Container - Full width on mobile */}
-            <div className="relative bg-background/80 backdrop-blur-xl p-5 sm:p-6 md:p-8 lg:p-10 rounded-2xl sm:rounded-3xl lg:rounded-4xl border border-white/10 shadow-2xl w-full">
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 sm:space-y-6 w-full">
-                  <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4 sm:gap-6">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel className="text-foreground/70 text-sm sm:text-base">Name</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="John Doe" 
-                              {...field} 
-                              className="bg-secondary/30 border-none h-10 sm:h-12 rounded-lg sm:rounded-xl focus-visible:ring-primary/50 text-sm sm:text-base w-full" 
-                            />
-                          </FormControl>
-                          <FormMessage className="text-xs sm:text-sm" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel className="text-foreground/70 text-sm sm:text-base">Email</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="john@example.com" 
-                              {...field} 
-                              className="bg-secondary/30 border-none h-10 sm:h-12 rounded-lg sm:rounded-xl focus-visible:ring-primary/50 text-sm sm:text-base w-full" 
-                            />
-                          </FormControl>
-                          <FormMessage className="text-xs sm:text-sm" />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-               
-
+          {/* Right — Form */}
+          <div className="w-full">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8">
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <FormField
                     control={form.control}
-                    name="message"
+                    name="name"
                     render={({ field }) => (
-                      <FormItem className="w-full">
-                        <FormLabel className="text-foreground/70 text-sm sm:text-base">Message</FormLabel>
+                      <FormItem>
+                        <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#f0ece3]/40 mb-3 block">Name</label>
                         <FormControl>
-                          <Textarea 
-                            placeholder="Tell me about your project..." 
-                            className="bg-secondary/30 border-none min-h-[100px] sm:min-h-[120px] rounded-lg sm:rounded-xl focus-visible:ring-primary/50 resize-none text-sm sm:text-base w-full"
-                            {...field} 
+                          <input
+                            {...field}
+                            placeholder="Your name"
+                            className="w-full bg-transparent border-b border-[#f0ece3]/20 pb-3 text-base text-[#f0ece3] placeholder:text-[#f0ece3]/20 focus:border-[#b8ff35] focus:outline-none transition-colors duration-300"
                           />
                         </FormControl>
-                        <FormMessage className="text-xs sm:text-sm" />
+                        <FormMessage className="text-xs font-mono text-red-400 mt-2" />
                       </FormItem>
                     )}
                   />
-
-                  <Button 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="w-full h-11 sm:h-14 rounded-lg sm:rounded-xl text-sm sm:text-base lg:text-lg font-bold bg-linear-to-r from-primary to-blue-600 hover:opacity-90 transition-all shadow-lg shadow-primary/25 group touch-manipulation"
-                  >
-                    {isSubmitting ? (
-                      <Loader2 className="w-4 h-4 sm:w-6 sm:h-6 animate-spin" />
-                    ) : (
-                      <>
-                        <span>Send Message</span>
-                        <Send className="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                      </>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#f0ece3]/40 mb-3 block">Email</label>
+                        <FormControl>
+                          <input
+                            {...field}
+                            placeholder="you@example.com"
+                            className="w-full bg-transparent border-b border-[#f0ece3]/20 pb-3 text-base text-[#f0ece3] placeholder:text-[#f0ece3]/20 focus:border-[#b8ff35] focus:outline-none transition-colors duration-300"
+                          />
+                        </FormControl>
+                        <FormMessage className="text-xs font-mono text-red-400 mt-2" />
+                      </FormItem>
                     )}
-                  </Button>
-                </form>
-              </Form>
-            </div>
-          </motion.div>
+                  />
+                </div>
+
+                <FormField
+                  control={form.control}
+                  name="message"
+                  render={({ field }) => (
+                    <FormItem>
+                      <label className="text-[10px] font-mono uppercase tracking-[0.2em] text-[#f0ece3]/40 mb-3 block">Message</label>
+                      <FormControl>
+                        <textarea
+                          {...field}
+                          rows={5}
+                          placeholder="Tell me about your project..."
+                          className="w-full bg-transparent border-b border-[#f0ece3]/20 pb-3 text-base text-[#f0ece3] placeholder:text-[#f0ece3]/20 focus:border-[#b8ff35] focus:outline-none transition-colors duration-300 resize-none"
+                        />
+                      </FormControl>
+                      <FormMessage className="text-xs font-mono text-red-400 mt-2" />
+                    </FormItem>
+                  )}
+                />
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="group w-full py-5 border border-[#b8ff35]/40 text-[#b8ff35] text-xs font-mono uppercase tracking-[0.2em] hover:bg-[#b8ff35] hover:text-[#0a0a0a] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 mt-4"
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>
+                      Send Message
+                      <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                    </>
+                  )}
+                </button>
+              </form>
+            </Form>
+          </div>
         </div>
-      </motion.div>
+
+      </div>
     </section>
   )
 }

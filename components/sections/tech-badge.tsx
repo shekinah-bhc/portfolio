@@ -9,9 +9,10 @@ interface TechBadgeProps {
   tech: string
   size?: "sm" | "md"
   showIcon?: boolean
+  className?: string
 }
 
-export function TechBadge({ tech, size = "sm", showIcon = true }: TechBadgeProps) {
+export function TechBadge({ tech, size = "sm", showIcon = true, className = "" }: TechBadgeProps) {
   const iconUrl = techIcons[tech]
   const hasIcon = showIcon && iconUrl
 
@@ -22,7 +23,7 @@ export function TechBadge({ tech, size = "sm", showIcon = true }: TechBadgeProps
 
   return (
     <motion.span
-      className={`inline-flex items-center rounded-full bg-primary/10 text-primary font-mono ${sizeClasses[size]}`}
+      className={`inline-flex items-center rounded-full bg-primary/10 text-primary font-mono ${sizeClasses[size]} ${className}`}
       whileHover={{ scale: 1.05, backgroundColor: "rgba(100, 255, 218, 0.2)" }}
       transition={{ duration: 0.2 }}
     >

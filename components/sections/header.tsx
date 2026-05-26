@@ -2,17 +2,14 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { Menu, X, FileText } from "lucide-react"
+import { Menu, X, ArrowUpRight } from "lucide-react"
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { siteConfig } from "@/lib/constants"
-import { cn } from "@/lib/utils"
 
 const navItems = [
   { name: "About", href: "#about" },
   { name: "Experience", href: "#experience" },
   { name: "Projects", href: "#projects" },
- // { name: "Blog", href: "#blog" },
   { name: "Contact", href: "#contact" },
 ]
 
@@ -22,11 +19,9 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [active, setActive] = useState<string | null>(null)
   const [hovered, setHovered] = useState<string | null>(null)
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 })
 
   const lastY = useRef(0)
   const navRef = useRef<HTMLDivElement>(null)
-  const itemRefs = useRef<Map<string, HTMLAnchorElement>>(new Map())
 
   const { scrollY } = useScroll()
 
@@ -56,25 +51,6 @@ export function Header() {
     return () => obs.disconnect()
   }, [])
 
-  // Indicator position — runs whenever hovered or active changes
-  useEffect(() => {
-    const target = hovered ?? active
-    if (!target || !navRef.current) {
-      setIndicatorStyle((s) => ({ ...s, opacity: 0 }))
-      return
-    }
-    const el = itemRefs.current.get(target)
-    const nav = navRef.current
-    if (!el) return
-    const navRect = nav.getBoundingClientRect()
-    const elRect = el.getBoundingClientRect()
-    setIndicatorStyle({
-      left: elRect.left - navRect.left,
-      width: elRect.width,
-      opacity: 1,
-    })
-  }, [hovered, active])
-
   return (
     <>
       {/* ── Navbar ── */}
@@ -82,41 +58,17 @@ export function Header() {
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: visible ? 0 : -80, opacity: visible ? 1 : 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 pt-5"
+        className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 md:px-8 pt-4"
       >
-        <motion.nav
-          animate={{
-            background: scrolled ? "rgba(0,0,0,0.75)" : "rgba(0,0,0,0.2)",
-            borderColor: scrolled ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.04)",
-            boxShadow: scrolled
-              ? "0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)"
-              : "0 2px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03)",
-          }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="flex items-center justify-between gap-6 rounded-2xl border px-4 py-2.5 w-full max-w-4xl"
-          style={{ backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)" }}
+        <nav
+          className="flex items-center justify-between w-full max-w-[1600px] py-4"
         >
-          {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2.5 shrink-0">
-            <div
-              className="relative w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm text-white overflow-hidden"
-              style={{
-                background: "linear-gradient(135deg, #60a5fa, #a78bfa)",
-                boxShadow: "0 0 14px rgba(96,165,250,0.4)",
-              }}
-            >
-              <span className="relative z-10">S</span>
-              <motion.div
-                className="absolute inset-0"
-                style={{
-                  background: "linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%)",
-                }}
-                initial={{ x: "-100%" }}
-                whileHover={{ x: "200%" }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-              />
+          {/* Logo — stark monogram */}
+          <Link href="/" className="group flex items-center gap-3 shrink-0">
+            <div className="w-9 h-9 border border-[#f0ece3]/20 flex items-center justify-center font-black text-sm text-[#b8ff35] tracking-tighter group-hover:border-[#b8ff35] group-hover:bg-[#b8ff35] group-hover:text-[#0a0a0a] transition-all duration-300">
+              S
             </div>
-            <span className="hidden min-[400px]:block text-sm font-semibold text-white tracking-tight">
+            <span className="hidden min-[400px]:block text-sm font-mono uppercase tracking-[0.15em] text-[#f0ece3]/70 group-hover:text-[#f0ece3] transition-colors duration-300">
               Shekinah
             </span>
           </Link>
@@ -124,73 +76,59 @@ export function Header() {
           {/* Desktop nav items */}
           <div
             ref={navRef}
-            className="hidden md:flex items-center relative"
+            className="hidden md:flex items-center gap-1"
             onMouseLeave={() => setHovered(null)}
           >
-
-            {navItems.map((item) => {
+            {navItems.map((item, i) => {
               const isActive = active === item.name
+              const isHovered = hovered === item.name
               return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  ref={(el) => { if (el) itemRefs.current.set(item.name, el) }}
                   onMouseEnter={() => setHovered(item.name)}
                   onClick={() => setActive(item.name)}
-                  className="relative px-4 py-2 text-[13px] font-medium rounded-lg z-10 transition-colors duration-200 select-none"
-                  style={{ color: isActive || hovered === item.name ? "#fff" : "rgba(148,163,184,0.7)" }}
+                  className="relative px-5 py-2 text-xs font-mono uppercase tracking-[0.2em] transition-colors duration-300 select-none"
+                  style={{
+                    color: isActive
+                      ? "#b8ff35"
+                      : isHovered
+                        ? "#f0ece3"
+                        : "rgba(240,236,227,0.4)",
+                  }}
                 >
                   {item.name}
-                  {/* Active dot */}
-                  <AnimatePresence>
-                    {isActive && (
-                      <motion.span
-                        key="dot"
-                        layoutId="active-dot"
-                        initial={{ opacity: 0, scale: 0 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className="absolute bottom-[3px] left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full"
-                        style={{ background: "#60a5fa", boxShadow: "0 0 5px #60a5fa" }}
-                      />
-                    )}
-                  </AnimatePresence>
+                  {/* Active underline */}
+                  <motion.div
+                    className="absolute bottom-0 left-2 right-2 h-px"
+                    style={{ background: "#b8ff35" }}
+                    initial={false}
+                    animate={{ scaleX: isActive ? 1 : 0, opacity: isActive ? 1 : 0 }}
+                    transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
+                  />
                 </Link>
               )
             })}
           </div>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-
+          <div className="flex items-center gap-3">
             <motion.a
               href="/resume.pdf"
               target="_blank"
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-[13px] font-medium"
-              style={{
-                background: "rgba(96,165,250,0.1)",
-                border: "1px solid rgba(96,165,250,0.22)",
-                color: "#60a5fa",
-              }}
+              className="hidden sm:flex items-center gap-2 px-5 py-2.5 text-xs font-mono uppercase tracking-[0.15em] border border-[#b8ff35]/40 text-[#b8ff35] hover:bg-[#b8ff35] hover:text-[#0a0a0a] transition-colors duration-300"
             >
-              <FileText className="w-3.5 h-3.5" />
-              Resume
+              Résumé
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </motion.a>
 
             {/* Burger */}
             <motion.button
               whileTap={{ scale: 0.92 }}
               onClick={() => setMobileOpen((v) => !v)}
-              className="md:hidden w-8 h-8 rounded-lg flex items-center justify-center"
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                color: "#94a3b8",
-              }}
+              className="md:hidden w-9 h-9 border border-[#f0ece3]/20 flex items-center justify-center text-[#f0ece3]/60 hover:border-[#b8ff35] hover:text-[#b8ff35] transition-colors duration-300"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {mobileOpen ? (
@@ -217,82 +155,86 @@ export function Header() {
               </AnimatePresence>
             </motion.button>
           </div>
-        </motion.nav>
+        </nav>
       </motion.header>
 
-      {/* ── Mobile menu — separate floating card ── */}
+      {/* ── Mobile menu ── */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            key="mobile"
-            initial={{ opacity: 0, y: -8, scale: 0.98 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -8, scale: 0.98 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed top-[76px] left-4 right-4 z-40 rounded-2xl overflow-hidden md:hidden"
-            style={{
-              background: "rgba(0,0,0,0.82)",
-              backdropFilter: "blur(28px)",
-              WebkitBackdropFilter: "blur(28px)",
-              border: "1px solid rgba(255,255,255,0.07)",
-              boxShadow: "0 24px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05)",
-            }}
-          >
-            {/* Accent line */}
-            <div
-              className="h-px w-full"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(96,165,250,0.6), rgba(167,139,250,0.6), transparent)" }}
+          <>
+            {/* Backdrop */}
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-40 bg-[#0a0a0a]/90 md:hidden"
+              style={{ backdropFilter: "blur(4px)" }}
+              onClick={() => setMobileOpen(false)}
             />
 
-            <div className="p-3 space-y-0.5">
-              {navItems.map((item, i) => (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.04, duration: 0.28, ease: "easeOut" }}
+            <motion.div
+              key="mobile"
+              initial={{ opacity: 0, x: "100%" }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: "100%" }}
+              transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
+              className="fixed top-0 right-0 bottom-0 w-[85vw] max-w-sm z-50 bg-[#0a0a0a] border-l border-[#f0ece3]/10 md:hidden flex flex-col"
+            >
+              {/* Close */}
+              <div className="flex justify-end p-6">
+                <motion.button
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setMobileOpen(false)}
+                  className="w-9 h-9 border border-[#f0ece3]/20 flex items-center justify-center text-[#f0ece3]/60 hover:border-[#b8ff35] hover:text-[#b8ff35] transition-colors duration-300"
                 >
-                  <Link
-                    href={item.href}
-                    onClick={() => { setMobileOpen(false); setActive(item.name) }}
-                    className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-colors duration-150"
-                    style={{
-                      color: active === item.name ? "#60a5fa" : "rgba(148,163,184,0.8)",
-                      background: active === item.name ? "rgba(96,165,250,0.08)" : "transparent",
-                    }}
-                  >
-                    {item.name}
-                    <motion.svg
-                      width="12" height="12" viewBox="0 0 24 24" fill="none"
-                      stroke={active === item.name ? "#60a5fa" : "rgba(148,163,184,0.3)"}
-                      strokeWidth="2"
-                      whileHover={{ x: 2 }}
-                    >
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </motion.svg>
-                  </Link>
-                </motion.div>
-              ))}
+                  <X className="w-4 h-4" />
+                </motion.button>
+              </div>
 
-              <div className="pt-2 px-1 pb-1">
-                <div className="h-px mb-3" style={{ background: "rgba(255,255,255,0.05)" }} />
+              {/* Nav links */}
+              <div className="flex flex-col px-8 gap-2 flex-1">
+                {navItems.map((item, i) => (
+                  <motion.div
+                    key={item.name}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + i * 0.06, duration: 0.4, ease: "easeOut" }}
+                  >
+                    <Link
+                      href={item.href}
+                      onClick={() => { setMobileOpen(false); setActive(item.name) }}
+                      className="group flex items-center justify-between py-5 border-b border-[#f0ece3]/10 transition-colors duration-300"
+                    >
+                      <span
+                        className="text-2xl font-bold uppercase tracking-tight transition-colors duration-300"
+                        style={{ color: active === item.name ? "#b8ff35" : "#f0ece3" }}
+                      >
+                        {item.name}
+                      </span>
+                      <span className="text-xs font-mono text-[#f0ece3]/20 group-hover:text-[#b8ff35] transition-colors duration-300">
+                        0{i + 1}
+                      </span>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Bottom CTA */}
+              <div className="p-8 border-t border-[#f0ece3]/10">
                 <motion.a
                   href="/resume.pdf"
                   target="_blank"
                   whileTap={{ scale: 0.97 }}
-                  className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-medium"
-                  style={{
-                    background: "rgba(96,165,250,0.08)",
-                    border: "1px solid rgba(96,165,250,0.2)",
-                    color: "#60a5fa",
-                  }}
+                  className="flex items-center justify-center gap-3 w-full py-4 text-xs font-mono uppercase tracking-[0.2em] border border-[#b8ff35]/40 text-[#b8ff35] hover:bg-[#b8ff35] hover:text-[#0a0a0a] transition-colors duration-300"
                 >
-                  <FileText className="w-4 h-4" />
-                  Resume
+                  Résumé
+                  <ArrowUpRight className="w-4 h-4" />
                 </motion.a>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
