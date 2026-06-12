@@ -6,6 +6,7 @@ import { Providers } from '@/components/providers'
 import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { TrackerWrapper } from '@/components/TrackerWrapper'
 const sans = Plus_Jakarta_Sans({ 
   subsets: ["latin"],
   variable: "--font-sans",
@@ -87,6 +88,7 @@ export default function RootLayout({
         </Providers>
         {process.env.NODE_ENV === 'production' && <Analytics />}
         <SpeedInsights />
+        <TrackerWrapper />
       </body>
     </html>
   )

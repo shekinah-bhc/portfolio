@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import clientPromise from '@/lib/mongodb'
+import { getDB } from '@/lib/mongodb'
 
 
 
@@ -48,8 +48,7 @@ export async function POST(req: NextRequest) {
 
 
 
-    const client = await clientPromise
-    const db = client.db('portfolio')
+    const db = await getDB()
     await db.collection('messages').insertOne({
       name,
       email,
