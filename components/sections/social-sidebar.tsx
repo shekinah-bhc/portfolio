@@ -1,13 +1,12 @@
 "use client"
 
 import { motion, Variants } from "framer-motion"
-import { Github, Linkedin, Twitter } from "lucide-react"
+import { Github, Linkedin } from "lucide-react"
 import { siteConfig } from "@/lib/constants"
 
 const socialLinks = [
   { name: "GitHub", icon: Github, href: siteConfig.links.github },
   { name: "LinkedIn", icon: Linkedin, href: siteConfig.links.linkedin },
-  { name: "Twitter", icon: Twitter, href: siteConfig.links.twitter },
 ]
 
 const containerVariants: Variants = {

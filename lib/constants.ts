@@ -11,8 +11,7 @@ export const siteConfig = {
   links: {
     github: 'https://github.com/shekinah-bhc',
     linkedin: 'https://www.linkedin.com/in/shekinah-florance-ab4449202',
-    instagram: '#',
-    twitter: '#',
+
   },
   nav: [
     { label: 'About', href: '#about' },
