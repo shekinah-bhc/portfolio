@@ -347,7 +347,7 @@ export function ProjectVideoShowcase({
     return (
       <section
         ref={containerRef}
-        className="relative py-24 overflow-visible"
+        className="relative py-16 md:py-24 overflow-visible"
         onMouseMove={handleMouseMove}
         style={{ perspective: "1200px" }}
       >
@@ -453,7 +453,7 @@ export function ProjectVideoShowcase({
   return (
     <section
       ref={containerRef}
-      className="py-32 relative z-10 overflow-visible"
+      className="py-20 md:py-32 relative z-10 overflow-visible"
       onMouseMove={handleMouseMove}
       style={{ perspective: "1200px" }}
     >

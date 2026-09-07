@@ -22,7 +22,7 @@ interface StickyScrollProps {
   contentClassName?: string;
 }
 
-const BACKGROUND_COLORS = ["#030712", "#020617", "#0a0a0a"] as const;
+const BACKGROUND_COLORS = ["#0a0a0a", "#050505", "#0f0f0f"] as const;
 const LINEAR_GRADIENTS = [
   "linear-gradient(135deg, rgba(184,255,53,0.05) 0%, rgba(10,10,10,1) 100%)",
   "linear-gradient(225deg, rgba(184,255,53,0.03) 0%, rgba(10,10,10,1) 100%)",
@@ -81,7 +81,7 @@ export const StickyScroll: React.FC<StickyScrollProps> = ({
       }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
       className={cn(
-        "relative flex items-start justify-center space-x-12 rounded-3xl p-10 max-w-7xl mx-auto",
+        "relative flex items-start justify-center lg:space-x-12 rounded-3xl p-4 lg:p-10 max-w-7xl mx-auto",
         "border border-white/5 shadow-2xl overflow-hidden"
       )}
       ref={containerRef}
@@ -93,12 +93,12 @@ export const StickyScroll: React.FC<StickyScrollProps> = ({
       <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-white/5 via-transparent to-transparent pointer-events-none" />
 
       {/* Left: Scrolling content */}
-      <div className="relative flex items-start px-6 w-full max-w-2xl z-10">
+      <div className="relative flex items-start px-2 lg:px-6 w-full max-w-2xl z-10">
         <div className="max-w-xl w-full">
           {content.map((item, index) => (
             <motion.div
               key={`${item.title}-${index}`}
-              className="my-40"
+              className="my-20 lg:my-40"
               animate={{
                 opacity: activeCard === index ? 1 : 0.3,
                 y: activeCard === index ? 0 : 20,
@@ -118,16 +118,23 @@ export const StickyScroll: React.FC<StickyScrollProps> = ({
                     {item.icon}
                   </motion.div>
                 )}
-                <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight leading-tight">
+                <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight leading-tight">
                   {item.title}
                 </h2>
               </div>
-              <p className="text-lg text-slate-300/80 leading-relaxed max-w-md font-light">
+              <p className="text-base lg:text-lg text-slate-300/80 leading-relaxed max-w-md font-light mb-8">
                 {item.description}
               </p>
+
+              {/* Show the right-panel content inline on mobile */}
+              {item.content && (
+                <div className="block lg:hidden w-full rounded-2xl overflow-hidden shadow-xl border border-white/10 mt-6">
+                  {item.content}
+                </div>
+              )}
             </motion.div>
           ))}
-          <div className="h-40" />
+          <div className="h-20 lg:h-40" />
         </div>
       </div>
 

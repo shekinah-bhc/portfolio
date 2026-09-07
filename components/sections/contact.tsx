@@ -10,7 +10,8 @@ import { SplitText } from "gsap/SplitText"
 import { siteConfig } from "@/lib/constants"
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form"
 import { toast } from "sonner"
-import { Github, Linkedin, ArrowUpRight, Loader2 } from "lucide-react"
+import { Github, Linkedin, ArrowUpRight, Loader2, Smile, ArrowLeft } from "lucide-react"
+import { motion } from "framer-motion"
 
 gsap.registerPlugin(ScrollTrigger, SplitText)
 
@@ -100,7 +101,7 @@ export function Contact() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-32 md:py-48 selection:bg-[#b8ff35] selection:text-[#0a0a0a]"
+      className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-20 md:py-48 selection:bg-[#b8ff35] selection:text-[#0a0a0a]"
     >
       {/* Noise Texture */}
       <div 
@@ -110,7 +111,7 @@ export function Contact() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-24 md:gap-32">
+      <div className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-16 md:gap-32">
 
         {/* Section Header */}
         <div className="flex items-center gap-6 border-t border-[#f0ece3]/20 pt-6">
@@ -129,10 +130,10 @@ export function Contact() {
         </h2>
 
         {/* Two Column: Info + Form */}
-        <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32 items-start">
+        <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 lg:gap-32 items-start">
           
           {/* Left — Info */}
-          <div className="flex flex-col gap-12">
+          <div className="flex flex-col gap-8 md:gap-12">
             <p className="text-lg md:text-xl font-light text-[#f0ece3]/60 leading-relaxed max-w-lg">
               Have a project in mind, or just want to say hello? Drop me a message. I&apos;m always open to discussing new opportunities, creative ideas, or ways to bring your vision to life.
             </p>
@@ -174,8 +175,58 @@ export function Contact() {
             </div>
           </div>
 
-          {/* Right — Form */}
-          <div className="w-full">
+          {/* Right — Form / Offline Box */}
+          <div className="w-full relative min-h-[300px]">
+            {/* Cut Corner Background */}
+            <div 
+              className="absolute inset-0 bg-[#111]"
+              style={{ clipPath: 'polygon(0 0, calc(100% - 64px) 0, 100% 64px, 100% 100%, 0 100%)' }}
+            />
+            {/* Folded Flap */}
+            <div 
+              className="absolute top-0 right-0 w-[64px] h-[64px] bg-[#1a1a1a] border-b border-l border-[#0a0a0a]"
+              style={{ clipPath: 'polygon(0 0, 0 100%, 100% 100%)' }}
+            />
+
+            <div className="relative z-10 flex flex-col items-center justify-center h-full py-16 md:py-32 bg-transparent overflow-hidden">
+              <motion.div
+                animate={{ opacity: [0.6, 1, 0.6], textShadow: ["0px 0px 0px rgba(184,255,53,0)", "0px 0px 15px rgba(184,255,53,0.3)", "0px 0px 0px rgba(184,255,53,0)"] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="text-[#f0ece3]/90 font-mono text-xl md:text-2xl uppercase tracking-[0.3em] font-black"
+              >
+                <a 
+                  href={`mailto:${siteConfig.email}`}
+                  className="flex items-center gap-4 bg-[#b8ff35] text-[#0a0a0a] px-8 py-4 rounded-full hover:scale-105 transition-transform duration-300 cursor-pointer"
+                >
+                  <div className="flex items-center mr-1">
+                    {[0, 1, 2].map((i) => (
+                      <motion.div
+                        key={i}
+                        animate={{ 
+                          opacity: [0.2, 1, 0.2], 
+                          scale: [0.8, 1.1, 0.8],
+                          x: [0, -3, 0]
+                        }}
+                        transition={{ 
+                          duration: 1.2, 
+                          repeat: Infinity, 
+                          ease: "easeInOut",
+                          delay: (2 - i) * 0.15 
+                        }}
+                        className="w-3 h-3 md:w-4 md:h-4 border-t-[3px] border-l-[3px] border-[#0a0a0a] -rotate-45 -ml-2"
+                      />
+                    ))}
+                  </div>
+                  SAY HELLO
+                </a>
+              </motion.div>
+
+              <span className="mt-8 text-[#f0ece3]/40 font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] text-center leading-relaxed">
+              <br/>Drop me an email to start the conversation!
+              </span>
+            </div>
+
+            {/* Temporarily Hidden Contact Form
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-8">
                 
@@ -251,6 +302,7 @@ export function Contact() {
                 </button>
               </form>
             </Form>
+            */}
           </div>
         </div>
 
