@@ -1,4 +1,8 @@
 import { MongoClient } from 'mongodb'
+import dns from 'dns'
+
+// Fix for Node.js 17+ and Windows DNS resolution issues with MongoDB Atlas SRV records
+dns.setDefaultResultOrder('ipv4first')
 
 const uri = process.env.MONGODB_URI
 const options = {}

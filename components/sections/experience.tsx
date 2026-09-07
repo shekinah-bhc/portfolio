@@ -4,90 +4,64 @@ import { StickyScroll, type ContentItem } from "../ui/sticky-scroll-reveal";
 
 const content: ContentItem[] = [
   {
-    title: "Senior Full Stack Engineer",
+    title: "Web Developer",
     description:
-      "Architected and scaled modern web applications using Next.js and Node.js. Led a team of developers to deliver high-performance, accessible, and deeply interactive digital experiences.",
+      "Developing and maintaining web applications for Bishop Heber College, working across React, Next.js, Node.js, MongoDB, MySQL, and REST APIs. Built admission workflows, administrative dashboards, and payment-related systems used in day-to-day operations.",
     icon: (
       <div className="w-12 h-12 flex items-center justify-center font-mono text-xl font-bold text-[#b8ff35] border border-[#b8ff35]/30">
         01
       </div>
     ),
     content: (
-      <div className="flex h-full w-full flex-col justify-center p-12 bg-[#0a0a0a] border border-[#f0ece3]/10 relative overflow-hidden group">
+      <div className="flex h-full w-full flex-col justify-center p-8 lg:p-12 bg-[#0a0a0a] border border-[#f0ece3]/10 relative overflow-hidden group">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(184,255,53,0.1),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
         <div className="relative z-10">
-          <div className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#b8ff35] mb-4">2022 — Present</div>
-          <div className="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tight text-[#f0ece3]">Tech Lead</div>
-          <div className="text-sm font-mono text-[#f0ece3]/50">Next.js / Node.js / AWS</div>
+          <div className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#b8ff35] mb-4">
+            2025 — Present
+          </div>
+          <div className="text-2xl md:text-5xl font-black mb-4 uppercase tracking-tight text-[#f0ece3]">
+            Web Developer
+          </div>
+          <div className="text-sm font-mono text-[#f0ece3]/50">
+            React / Next.js / Node.js / MongoDB
+          </div>
         </div>
       </div>
     ),
   },
+
   {
-    title: "Frontend Developer",
+    title: "Full Stack Developer Intern",
     description:
-      "Crafted award-winning user interfaces. Focused on micro-interactions, WebGL integrations, and maintaining strict performance budgets while pushing creative boundaries.",
+      "Worked on an internal project tracking and KPI visualization application, developing responsive dashboards and full-stack features using React, Vite, Tailwind CSS, PHP, and MySQL.",
     icon: (
       <div className="w-12 h-12 flex items-center justify-center font-mono text-xl font-bold text-[#b8ff35] border border-[#b8ff35]/30">
         02
       </div>
     ),
     content: (
-      <div className="flex h-full w-full flex-col justify-center p-12 bg-[#0a0a0a] border border-[#f0ece3]/10 relative overflow-hidden group">
+      <div className="flex h-full w-full flex-col justify-center p-8 lg:p-12 bg-[#0a0a0a] border border-[#f0ece3]/10 relative overflow-hidden group">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(184,255,53,0.1),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
         <div className="relative z-10">
-          <div className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#b8ff35] mb-4">2020 — 2022</div>
-          <div className="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tight text-[#f0ece3]">UI / UX</div>
-          <div className="text-sm font-mono text-[#f0ece3]/50">React / GSAP / Three.js</div>
+          <div className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#b8ff35] mb-4">
+            Jul 2025 — Oct 2025
+          </div>
+          <div className="text-2xl md:text-5xl font-black mb-4 uppercase tracking-tight text-[#f0ece3]">
+            Full Stack Intern
+          </div>
+          <div className="text-sm font-mono text-[#f0ece3]/50">
+            React / Vite / PHP / MySQL
+          </div>
         </div>
       </div>
     ),
   },
-  {
-    title: "Backend Specialist",
-    description:
-      "Designed robust APIs and database architectures. Ensured high availability, implemented caching layers, and optimized complex queries for massive datasets.",
-    icon: (
-      <div className="w-12 h-12 flex items-center justify-center font-mono text-xl font-bold text-[#b8ff35] border border-[#b8ff35]/30">
-        03
-      </div>
-    ),
-    content: (
-      <div className="flex h-full w-full flex-col justify-center p-12 bg-[#0a0a0a] border border-[#f0ece3]/10 relative overflow-hidden group">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(184,255,53,0.1),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-        <div className="relative z-10">
-          <div className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#b8ff35] mb-4">2018 — 2020</div>
-          <div className="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tight text-[#f0ece3]">Systems</div>
-          <div className="text-sm font-mono text-[#f0ece3]/50">MongoDB / Express / Redis</div>
-        </div>
-      </div>
-    ),
-  },
-  {
-    title: "Freelance Engineer",
-    description:
-      "Delivered end-to-end solutions for diverse global clients. Managed client communication, project scoping, and full-stack implementation from zero to production.",
-    icon: (
-      <div className="w-12 h-12 flex items-center justify-center font-mono text-xl font-bold text-[#b8ff35] border border-[#b8ff35]/30">
-        04
-      </div>
-    ),
-    content: (
-      <div className="flex h-full w-full flex-col justify-center p-12 bg-[#0a0a0a] border border-[#f0ece3]/10 relative overflow-hidden group">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(184,255,53,0.1),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-        <div className="relative z-10">
-          <div className="text-[10px] font-mono tracking-[0.2em] uppercase text-[#b8ff35] mb-4">2016 — 2018</div>
-          <div className="text-3xl md:text-5xl font-black mb-4 uppercase tracking-tight text-[#f0ece3]">Independent</div>
-          <div className="text-sm font-mono text-[#f0ece3]/50">Full Stack / Consulting</div>
-        </div>
-      </div>
-    ),
-  },
-];
 
+ 
+]
 export function Experience() {
   return (
-    <section id="experience" className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-32 md:py-48 selection:bg-[#b8ff35] selection:text-[#0a0a0a]">
+    <section id="experience" className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-20 md:py-48 selection:bg-[#b8ff35] selection:text-[#0a0a0a]">
       {/* Noise Texture */}
       <div 
         className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none mix-blend-screen"
@@ -96,7 +70,7 @@ export function Experience() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-12">
+      <div className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-8 md:gap-12">
         {/* Section Header */}
         <div className="flex items-center gap-6 border-t border-[#f0ece3]/20 pt-6 mb-12">
           <span className="text-[#b8ff35] font-mono text-sm tracking-widest">[ 03 ]</span>
@@ -109,7 +83,7 @@ export function Experience() {
             <span className="text-[#b8ff35]">Timeline.</span>
           </h2>
           <p className="text-lg text-[#f0ece3]/60 font-light leading-relaxed">
-            A track record of building robust, scalable, and beautifully designed digital products across different tech stacks and industries.
+My experience across production web applications, full-stack development, and systems used in real-world workflows.
           </p>
         </div>
         

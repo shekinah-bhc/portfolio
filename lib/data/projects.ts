@@ -32,88 +32,118 @@ export const projects: Project[] = [
     id: "reborn-interactive",
     slug: "reborn-interactive",
     title: "Reborn Interactive",
-    type: "Client Work",
-    category: "Creative Agency Website",
+    type: "Professional Work",
+    category: "Production Website",
     status: "Live",
-    year: "2024",
-    role: "Full-Stack Engineer",
+    year: "2025",
+    role: "Full-Stack Developer",
     liveUrl: "https://reborninteractive.com",
-    stack: ["Next.js 15", "TypeScript", "GSAP", "ScrollTrigger", "Three.js", "i18n", "feature-sliced architecture"],
-    description: "Production website built from scratch for a creative agency. Multi-language, GPU-accelerated animations, custom Three.js visuals.",
+    stack: [
+      "Next.js",
+      "TypeScript",
+      "GSAP",
+      "ScrollTrigger",
+      "Three.js",
+      "i18n"
+    ],
+    description:
+      "A production website developed from scratch with multilingual routing, interactive animations, and custom 3D visual experiences.",
     whatIDid: {
-      design: "Custom animation system, editorial typography, dark luxury aesthetic",
-      frontend: "GSAP/ScrollTrigger scroll sequences, Three.js scenes, i18n route groups",
-      backend: "Next.js 15 App Router, performance-optimized, Feature-sliced structure",
+      design:
+        "Implemented the visual interface, typography system, responsive layouts, and animation-driven interactions.",
+      frontend:
+        "Built the application with Next.js and TypeScript, including GSAP and ScrollTrigger interactions, Three.js scenes, and multilingual routing.",
+      backend:
+        "Structured the Next.js application for maintainability and performance, with optimized rendering and reusable feature modules."
     },
     highlights: [
-      "GPU-accelerated animations",
-      "Multi-language support (i18n)",
-      "Performance-optimized architecture"
+      "Built from scratch using Next.js and TypeScript",
+      "Implemented multilingual routing",
+      "Developed GSAP and ScrollTrigger interactions",
+      "Integrated custom Three.js visual experiences"
     ],
-    testimonial: {
-      quote: "Shekinah delivered a polished, production-ready site that exceeded our expectations.",
-      author: "Client",
-      role: "Reborn Interactive"
-    },
-    videoUrls: ["/assets/video/about.mp4", "/assets/video/dashboard_globe.mp4"]
+    videoUrls: [
+      "/assets/video/about.mp4",
+      "/assets/video/dashboard_globe.mp4"
+    ]
   },
 
   {
     id: "alumni-portal",
     slug: "alumni-portal",
     title: "Alumni Dashboard",
-    type: "Client Work",
-    category: "Full-Stack Web App",
+    type: "Professional Work",
+    category: "Full-Stack Web Application",
     status: "Private",
-    year: "2024",
+    year: "2025",
     role: "Full-Stack Developer",
     client: "Bishop Heber College",
-    stack: ["React", "TypeScript", "Redux Toolkit", "PHP", "MySQL", "CCAvenue", "AWS S3", "@react-pdf/renderer"],
-    description: "Full-stack alumni registration and payment system with CCAvenue gateway integration, document upload, and a matched payments dashboard.",
+    stack: [
+      "React",
+      "TypeScript",
+      "Redux Toolkit",
+      "PHP",
+      "MySQL",
+      "CCAvenue",
+      "AWS S3"
+    ],
+    description:
+      "A full-stack alumni registration and payment platform with document uploads, payment processing, PDF receipts, and administrative transaction tracking.",
     whatIDid: {
-      design: "Multi-step registration flow, matched payments dashboard UI",
-      frontend: "Redux Toolkit, TypeScript, dynamic fee logic, PDF receipt generation",
-      backend: "PHP/MySQL backend, CCAvenue payment integration, S3 document storage, INNER JOIN matched payments query",
+      design:
+        "Built multi-step registration workflows, fee-related interfaces, and an administrative payment dashboard.",
+      frontend:
+        "Developed React interfaces with TypeScript and Redux Toolkit, dynamic fee handling, validation, and PDF receipt generation.",
+      backend:
+        "Implemented PHP/MySQL APIs, CCAvenue payment integration, AWS S3 document storage, and database queries for payment reconciliation."
     },
     highlights: [
-      "Secure CCAvenue payment integration",
-      "Automated PDF receipt generation",
-      "Real-time matched payments dashboard"
+      "Integrated CCAvenue payment processing",
+      "Implemented AWS S3 document uploads",
+      "Generated PDF payment receipts",
+      "Built payment tracking and reconciliation workflows"
     ],
-    videoUrls: ["/assets/video/alumni-dashboard.mp4"]
+    videoUrls: [
+      "/assets/video/alumni-dashboard.mp4"
+    ]
   },
+
   {
     id: "wedding-invite-balasundar",
     slug: "wedding-invite-balasundar",
     title: "Wedding Invitation Website",
     type: "Client Work",
-    category: "Interactive Microsite",
+    category: "Interactive Website",
     status: "Live",
-    year: "2024",
-    role: "Frontend Engineer",
+    year: "2025",
+    role: "Frontend Developer",
     liveUrl: "https://invite.balasundar.in/",
     client: "Balasundar",
-    stack: ["Next.js", "TypeScript", "Framer Motion", "Tailwind CSS"],
-    description: "Custom digital wedding invitation website with smooth animations, event details, and responsive design tailored for a modern invite experience.",
+    stack: [
+      "Next.js",
+      "TypeScript",
+      "Framer Motion",
+      "Tailwind CSS"
+    ],
+    description:
+      "A responsive digital wedding invitation website with animated sections, event information, and a mobile-focused user experience.",
     whatIDid: {
-      design: "Elegant invitation-style UI with typography-focused layout and smooth transitions",
-      frontend: "Animated sections using Framer Motion, responsive layout, optimized asset loading",
-      backend: "Static optimized deployment with Next.js",
+      design:
+        "Designed the invitation interface with a typography-focused layout and responsive visual hierarchy.",
+      frontend:
+        "Implemented animated sections using Framer Motion, responsive layouts, and optimized static assets.",
+      backend:
+        "Configured the application as a lightweight Next.js deployment optimized for fast page loading."
     },
     highlights: [
-      "Smooth animated invite experience",
-      "Mobile-first responsive design",
-      "Fast-loading static deployment"
+      "Built a responsive mobile-first interface",
+      "Implemented smooth Framer Motion animations",
+      "Optimized the site for fast loading",
+      "Deployed as a production Next.js application"
     ],
-    testimonial: {
-      quote: "The website gave our wedding invite a modern and memorable touch.",
-      author: "Balasundar",
-      role: "Client"
-    },
     videoUrl: "/assets/video/wedding.mp4"
   }
 ]
-
 export function getProjectBySlug(slug: string): Project | undefined {
   return projects.find((project) => project.slug === slug)
 }

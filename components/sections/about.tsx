@@ -9,16 +9,28 @@ gsap.registerPlugin(ScrollTrigger, SplitText)
 
 const skillGroups = [
   {
-    name: "Frontend",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind", "GSAP", "Three.js"],
+    name: "MERN STACK",
+    skills: ["MongoDB", "Express.js", "React", "Node.js"],
   },
   {
-    name: "Backend",
-    skills: ["Node.js", "Express", "MongoDB", "MySQL", "APIs"],
+    name: "FRONTEND",
+    skills: ["Next.js", "TypeScript", "Tailwind CSS", "Redux", "Vite"],
   },
   {
-    name: "System",
-    skills: ["Git", "AWS", "Vercel", "Docker", "Redux"],
+    name: "BACKEND",
+    skills: ["PHP", "REST APIs", "Python", "Django", "Flask"],
+  },
+  {
+    name: "DATABASE",
+    skills: ["MongoDB", "MySQL", "SQL"],
+  },
+  {
+    name: "CLOUD & DEPLOYMENT",
+    skills: ["AWS", "Vercel", "Git", "Deployment"],
+  },
+  {
+    name: "INTEGRATIONS",
+    skills: ["Payment Gateways", "API Integration", "AWS S3"],
   },
 ]
 
@@ -39,9 +51,9 @@ export function About() {
             ease: "none",
             stagger: 0.1,
             scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 60%",
-              end: "bottom 60%",
+              trigger: manifestoRef.current,
+              start: "top 85%",
+              end: "bottom 40%",
               scrub: true,
             }
           }
@@ -73,7 +85,7 @@ export function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-32 md:py-48 selection:bg-[#b8ff35] selection:text-[#0a0a0a]"
+      className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-20 md:py-48 selection:bg-[#b8ff35] selection:text-[#0a0a0a]"
     >
       {/* Noise Texture */}
       <div 
@@ -83,13 +95,13 @@ export function About() {
         }}
       />
 
-      <div className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-24 md:gap-40">
+      <div className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-16 md:gap-40">
         
         {/* Top Header / The Manifesto */}
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-8 md:gap-12">
           <div className="flex items-center gap-6 border-t border-[#f0ece3]/20 pt-6">
             <span className="text-[#b8ff35] font-mono text-sm tracking-widest">[ 01 ]</span>
-            <span className="text-sm tracking-[0.3em] uppercase font-light text-[#f0ece3]/60">The Manifesto</span>
+            <span className="text-sm tracking-[0.3em] uppercase font-light text-[#f0ece3]/60">About</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
@@ -98,38 +110,48 @@ export function About() {
               <h2 
                 ref={manifestoRef}
                 className="text-[clamp(2rem,4vw,4.5rem)] font-medium leading-[1.15] tracking-tight uppercase"
+                
               >
-                I engineer digital ecosystems. By bridging aggressive backend logic with fluid, intentional front-end motion, I create interfaces that don&apos;t just exist—they <span className="italic font-serif text-[#b8ff35] lowercase tracking-normal">perform</span>. Performance shouldn&apos;t sacrifice personality.
+              I’m a software developer focused on building modern web applications, dashboards, and backend systems. I work across the stack to turn complex requirements into reliable and maintainable software.
+
               </h2>
             </div>
           </div>
         </div>
 
         {/* 1px Grid Bento / The Arsenal */}
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-8 md:gap-12">
           <div className="flex items-center gap-6 border-t border-[#f0ece3]/20 pt-6">
             <span className="text-[#b8ff35] font-mono text-sm tracking-widest">[ 02 ]</span>
-            <span className="text-sm tracking-[0.3em] uppercase font-light text-[#f0ece3]/60">The Arsenal</span>
+            <span className="text-sm tracking-[0.3em] uppercase font-light text-[#f0ece3]/60">Technologies</span>
           </div>
 
-          <div ref={gridRef} className="grid grid-cols-1 lg:grid-cols-3 gap-px bg-[#f0ece3]/10 border border-[#f0ece3]/10">
+          <div ref={gridRef} className="flex flex-col border-t border-[#f0ece3]/10">
             {skillGroups.map((group, i) => (
               <div 
                 key={i} 
-                className="group relative bg-[#0a0a0a] p-10 md:p-14 flex flex-col gap-24 overflow-hidden transition-colors duration-700 hover:bg-[#111]"
+                className="group relative flex flex-col md:flex-row md:items-center justify-between gap-6 p-6 md:p-8 border-b border-[#f0ece3]/10 bg-[#0a0a0a] hover:bg-[#111] transition-all duration-500 overflow-hidden"
               >
-                {/* Hover Glow */}
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_100%_0%,rgba(184,255,53,0.1),transparent_50%)] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+                {/* Left Accent Bar on Hover */}
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#b8ff35] scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-top" />
+
+                {/* Hover Glow Effect */}
+                <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(184,255,53,0.05),transparent)] -translate-x-[100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none" />
                 
-                <h3 className="text-2xl md:text-3xl font-black uppercase tracking-widest text-[#f0ece3]/30 group-hover:text-[#b8ff35] transition-colors duration-500">
-                  {group.name}
-                </h3>
+                <div className="flex items-center gap-6 md:w-1/3 shrink-0 relative z-10 pl-2 md:pl-0">
+                  <span className="text-[#f0ece3]/10 font-mono text-sm group-hover:text-[#b8ff35]/50 transition-colors duration-500 hidden sm:block">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h3 className="text-xl md:text-2xl font-black uppercase tracking-widest text-[#f0ece3]/40 group-hover:text-[#f0ece3] transition-colors duration-500">
+                    {group.name}
+                  </h3>
+                </div>
                 
-                <div className="flex flex-wrap gap-3 mt-auto relative z-10">
+                <div className="flex flex-wrap gap-2 relative z-10 justify-start md:justify-end flex-1 pl-2 md:pl-0">
                   {group.skills.map(skill => (
                     <span 
                       key={skill}
-                      className="px-4 py-2 border border-[#f0ece3]/15 rounded-full text-[10px] md:text-xs font-mono uppercase tracking-widest text-[#f0ece3]/60 group-hover:border-[#b8ff35]/40 group-hover:text-[#f0ece3] transition-colors duration-300 bg-[#0a0a0a]"
+                      className="px-4 py-2 border border-[#f0ece3]/10 text-[10px] md:text-xs font-mono uppercase tracking-widest text-[#f0ece3]/50 group-hover:border-[#b8ff35]/40 group-hover:text-[#b8ff35] group-hover:bg-[#b8ff35]/5 transition-all duration-300 bg-[#0a0a0a] shadow-[0_0_0_0_rgba(184,255,53,0)] group-hover:shadow-[0_0_15px_0_rgba(184,255,53,0.1)]"
                     >
                       {skill}
                     </span>

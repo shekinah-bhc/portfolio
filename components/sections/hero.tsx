@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from "react"
 import { motion, useScroll, useTransform } from "framer-motion"
 import { siteConfig } from "@/lib/constants"
 
-const marqueeText = "REACT · NEXT.JS · NODE.JS · TYPESCRIPT · GSAP · THREE.JS · FRAMER MOTION ✦ "
+const marqueeText = "REACT · NEXT.JS · NODE.JS · TYPESCRIPT · GSAP · THREE.JS · FRAMER MOTION · MONGODB · MYSQL"
 
 const textVariants = {
   hidden: { opacity: 0, y: 100, rotateX: 90 },
@@ -44,7 +44,7 @@ export function Hero() {
 
   // Safely fallback to a default name if siteConfig isn't properly loaded or misses a name
   const rawName = siteConfig?.name || "Developer"
-  const headline1Chars = "CREATIVE".split("")
+  const headline1Chars = "SOFTWARE".split("")
   const headline2Chars = "DEVELOPER".split("")
 
   return (
@@ -104,7 +104,7 @@ export function Hero() {
         />
       </div>
 
-      <div className="relative z-20 grow flex flex-col justify-between pt-32 pb-8 px-6 md:px-12 w-full max-w-[1800px] mx-auto">
+      <div className="relative z-20 grow flex flex-col justify-between pt-24 md:pt-32 pb-8 px-6 md:px-12 w-full max-w-[1800px] mx-auto">
         
         {/* Center/Mid - Giant Name Bleeding off edges */}
         <div className="grow flex items-center w-full mt-10 md:mt-0">
@@ -156,7 +156,7 @@ export function Hero() {
         </div>
 
         {/* Bottom elements anchors */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end w-full gap-12 mt-12 mb-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end w-full gap-8 md:gap-12 mt-8 md:mt-12 mb-6">
           
           {/* CTA & Tagline (Bottom Left) */}
           <div className="flex flex-col max-w-md gap-8">
@@ -166,8 +166,7 @@ export function Hero() {
               transition={{ delay: 2.0, duration: 0.8, ease: "easeOut" }}
               className="text-lg md:text-xl leading-relaxed text-[#f0ece3]/80 font-light"
             >
-              Creative full-stack developer engineering art-directed, interactive web experiences. 
-              No templates. Just code and raw creative confidence.
+            Web developer building scalable applications, dashboards, and data-driven systems with modern technologies.
             </motion.p>
             
             <motion.div 
@@ -197,11 +196,9 @@ export function Hero() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#b8ff35] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#b8ff35]"></span>
               </span>
-              Open to work ✦
+              Open to work 
             </div>
-            <div className="text-xs tracking-widest uppercase text-[#f0ece3]/40">
-              BASED IN INTERNET
-            </div>
+          
           </motion.div>
         </div>
       </div>

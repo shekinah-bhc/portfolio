@@ -137,7 +137,7 @@ export function Projects() {
   const projects = getAllProjects()
 
   return (
-    <section id="projects" className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-32 md:py-0 selection:bg-[#b8ff35] selection:text-[#0a0a0a]">
+    <section id="projects" className="relative w-full bg-[#0a0a0a] text-[#f0ece3] overflow-hidden py-20 md:py-32 selection:bg-[#b8ff35] selection:text-[#0a0a0a]">
       {/* Noise Texture */}
       <div 
         className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none mix-blend-screen"
@@ -151,7 +151,7 @@ export function Projects() {
         variants={containerVariants}
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-12"
+        className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-12 flex flex-col gap-8 md:gap-12"
       >
         {/* Section Header */}
         <div className="flex items-center gap-6 border-t border-[#f0ece3]/20 pt-6 mb-12">
@@ -171,7 +171,7 @@ export function Projects() {
             variants={itemVariants}
             className="text-lg text-[#f0ece3]/60 font-light leading-relaxed"
           >
-            A curated selection of my latest work. From experimental interactive experiences to production-ready scalable applications.
+         A selection of production applications and full-stack projects I've built and contributed to, covering admissions, dashboards, payments, APIs, and data-driven workflows.
           </motion.p>
         </div>
 

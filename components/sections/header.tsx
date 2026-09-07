@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
-import { Menu, X, ArrowUpRight } from "lucide-react"
+import { Menu, X, ArrowUpRight, ArrowDown } from "lucide-react"
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from "framer-motion"
 import { siteConfig } from "@/lib/constants"
 
@@ -114,14 +114,14 @@ export function Header() {
           {/* Right actions */}
           <div className="flex items-center gap-3">
             <motion.a
-              href="/resume.pdf"
+              href="/assets/resume/resume.pdf"
               target="_blank"
+              download
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               className="hidden sm:flex items-center gap-2 px-5 py-2.5 text-xs font-mono uppercase tracking-[0.15em] border border-[#b8ff35]/40 text-[#b8ff35] hover:bg-[#b8ff35] hover:text-[#0a0a0a] transition-colors duration-300"
             >
               Résumé
-              <ArrowUpRight className="w-3.5 h-3.5" />
             </motion.a>
 
             {/* Burger */}
@@ -224,8 +224,9 @@ export function Header() {
               {/* Bottom CTA */}
               <div className="p-8 border-t border-[#f0ece3]/10">
                 <motion.a
-                  href="/resume.pdf"
+                  href="/assets/resume/resume.pdf"
                   target="_blank"
+                  download
                   whileTap={{ scale: 0.97 }}
                   className="flex items-center justify-center gap-3 w-full py-4 text-xs font-mono uppercase tracking-[0.2em] border border-[#b8ff35]/40 text-[#b8ff35] hover:bg-[#b8ff35] hover:text-[#0a0a0a] transition-colors duration-300"
                 >
